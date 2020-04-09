@@ -13,7 +13,7 @@ export default () => {
     graphql`
       query {
         site {
-          siteMetaData {
+          siteMetadata {
             author
           }
         }
@@ -23,7 +23,7 @@ export default () => {
 
   return (
     <FooterContainer>
-      © {data.site.siteMetaData.author} {new Date().getFullYear()}
+      © {data.site.siteMetadata.author} {new Date().getFullYear()}
     </FooterContainer>
   )
 }
