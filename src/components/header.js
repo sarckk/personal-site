@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { UnstyledLink } from "./page-elements"
 import styled from "styled-components"
 import SearchIcon from "../images/search.svg"
 import { useStaticQuery, graphql } from "gatsby"
+import { throttle } from "lodash"
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -10,10 +11,14 @@ const HeaderContainer = styled.div`
   top: 0;
   width: 800px;
   align-items: center;
-  padding: 20px 0;
+  justify-content: center;
+  padding: 12px 5px;
   transition: transform 0.4s ease;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray[500]};
-  z-index: 1;
+  z-index: 2;
+  transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
 `
 
 const SiteTitle = styled(UnstyledLink)`
@@ -23,7 +28,9 @@ const SiteTitle = styled(UnstyledLink)`
 
 const HeaderNav = styled.ul`
   list-style: none;
-  margin-right: ${({ theme }) => theme.spacing["2"]};
+  display: flex;
+  align-items: center;
+  height: 27px;
 `
 
 const HeaderLI = styled.li`
@@ -31,6 +38,7 @@ const HeaderLI = styled.li`
   margin: 0 ${({ theme }) => theme.spacing["6"]};
   display: inline-block;
   transition: all 0.4s ease;
+  height: 100%;
   transform: ${props => (props.visible ? "scale(0)" : "scale(1)")};
 
   &:nth-child(1) {
@@ -48,6 +56,11 @@ const HeaderLI = styled.li`
   &:nth-child(4) {
     transition-delay: ${props => (props.visible ? "240ms" : "320ms")};
   }
+
+  &:nth-child(5) {
+    transition-delay: ${props => (props.visible ? "200ms" : "360ms")};
+    margin-right: 0;
+  }
 `
 
 const ListItem = props => (
@@ -61,14 +74,19 @@ const SearchButton = styled.button`
   border: 0;
   padding: 0;
   background-color: ${({ theme }) => theme.colors.transparent};
-  height: 18px;
-  width: 18px;
-  transition: all 0.4s ease;
-  transition-delay: ${props => (props.visible ? "200ms" : "360ms")};
-  transform: ${props => (props.visible ? "scale(0)" : "scale(1)")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 27px;
 
   &:focus {
     outline: none;
+  }
+
+  &:hover .cls-1 {
+    stroke: ${({ theme }) => theme.colors.gray[600]};
+    transition: all 0.3s ease;
   }
 `
 
@@ -76,7 +94,6 @@ const SearchPanel = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  overflow: hidden;
   right: 0;
   width: 60%;
   height: 40px;
@@ -110,17 +127,12 @@ const SearchInput = styled.input`
   }
 `
 
-const SearchIconWithHover = styled(SearchIcon)`
-  &:hover .cls-1 {
-    stroke: ${({ theme }) => theme.colors.gray[600]};
-    transition: all 0.3s ease;
-  }
+const SearchIcon17px = styled(SearchIcon)`
+  height: 17px;
+  width: 17px;
 `
 
-const SearchIcon18px = styled(SearchIcon)`
-  height: 18px;
-  width: 18px;
-
+const SearchIcon17pxGray = styled(SearchIcon17px)`
   .cls-1 {
     stroke: ${({ theme }) => theme.colors.gray[600]};
   }
@@ -159,6 +171,7 @@ const SearchCloseRight = styled(SearchCloseBar)`
 
 export default () => {
   const [searchVisible, setSearchVisible] = useState(false)
+  const [hideHeader, setHideHeader] = useState(false)
   const searchInput = useRef(null)
 
   const toggleSearch = () => {
@@ -170,7 +183,7 @@ export default () => {
     graphql`
       query {
         site {
-          siteMetaData {
+          siteMetadata {
             title
           }
         }
@@ -178,9 +191,28 @@ export default () => {
     `
   )
 
+  useEffect(() => {
+    let prevScrollOffset = 0
+
+    const throttledScrollHandler = throttle(() => {
+      const currentScrollOffset = window.pageYOffset
+      const scrolledMin = currentScrollOffset > 30
+      const isScrolledDown = prevScrollOffset < currentScrollOffset
+      prevScrollOffset = currentScrollOffset
+      setHideHeader(isScrolledDown && scrolledMin)
+    }, 250)
+
+    window.addEventListener("scroll", throttledScrollHandler)
+
+    return () => {
+      console.log("unmounted") // why isn't this called?
+      window.removeEventListener("scroll", throttledScrollHandler)
+    }
+  }, [])
+
   return (
-    <HeaderContainer>
-      <SiteTitle to="/">{data.site.siteMetaData.title}</SiteTitle>
+    <HeaderContainer hide={hideHeader}>
+      <SiteTitle to="/">{data.site.siteMetadata.title}</SiteTitle>
 
       <HeaderNav>
         <ListItem to="/about" visible={searchVisible}>
@@ -195,14 +227,15 @@ export default () => {
         <ListItem to="/books" visible={searchVisible}>
           books
         </ListItem>
+        <HeaderLI visible={searchVisible}>
+          <SearchButton onClick={toggleSearch}>
+            <SearchIcon17px />
+          </SearchButton>
+        </HeaderLI>
       </HeaderNav>
 
-      <SearchButton onClick={toggleSearch} visible={searchVisible}>
-        <SearchIconWithHover />
-      </SearchButton>
-
       <SearchPanel visible={searchVisible}>
-        <SearchIcon18px />
+        <SearchIcon17pxGray />
         <SearchForm>
           <SearchInput placeholder="Start searching..." ref={searchInput} />
         </SearchForm>
