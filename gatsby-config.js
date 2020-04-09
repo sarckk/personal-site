@@ -5,12 +5,13 @@
  */
 
 module.exports = {
-  siteMetaData: {
+  siteMetadata: {
     title: `yonghoonshin`,
     description: `Personal website of Yong Hoon Shin`,
     author: `Yong Hoon Shin`,
   },
   plugins: [
+    `gatsby-plugin-netlify-cms`,
     `gatsby-plugin-styled-components`,
     {
       resolve: "gatsby-plugin-web-font-loader",
