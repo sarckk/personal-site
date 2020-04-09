@@ -6,15 +6,21 @@ import Footer from "../footer"
 const Container = styled.div`
   width: 800px;
   margin: 0 auto;
-  padding: 120px 0;
-  height: 100%;
+  padding-top: 100px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
+const ContentArea = styled.main`
+  flex: 1 0 auto;
 `
 
 export default ({ children }) => {
   return (
     <Container>
       <Header />
-      {children}
+      <ContentArea>{children}</ContentArea>
       <Footer />
     </Container>
   )

@@ -3,10 +3,9 @@ import styled from "styled-components"
 import { useStaticQuery, graphql } from "gatsby"
 
 const FooterContainer = styled.div`
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  text-align: center;
+  margin-bottom: 20px;
+  flex-shrink: 0;
 `
 
 export default () => {
