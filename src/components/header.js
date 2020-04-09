@@ -2,14 +2,18 @@ import React, { useState, useRef } from "react"
 import { UnstyledLink } from "./page-elements"
 import styled from "styled-components"
 import SearchIcon from "../images/search.svg"
+import { useStaticQuery, graphql } from "gatsby"
 
 const HeaderContainer = styled.div`
   display: flex;
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 800px;
   align-items: center;
   padding: 20px 0;
   transition: transform 0.4s ease;
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray[500]};
+  z-index: 1;
 `
 
 const SiteTitle = styled(UnstyledLink)`
@@ -127,7 +131,7 @@ const SearchClose = styled.button`
   background-color: ${({ theme }) => theme.colors.transparent};
   border: 0;
   height: 100%;
-  width: 40px;
+  width: 25px;
 
   cursor: pointer;
 
@@ -162,9 +166,21 @@ export default () => {
     searchInput.current.focus()
   }
 
+  const data = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetaData {
+            title
+          }
+        }
+      }
+    `
+  )
+
   return (
     <HeaderContainer>
-      <SiteTitle to="/">yonghoonshin</SiteTitle>
+      <SiteTitle to="/">{data.site.siteMetaData.title}</SiteTitle>
 
       <HeaderNav>
         <ListItem to="/about" visible={searchVisible}>

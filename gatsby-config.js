@@ -5,23 +5,28 @@
  */
 
 module.exports = {
+  siteMetaData: {
+    title: `yonghoonshin`,
+    description: `Personal website of Yong Hoon Shin`,
+    author: `Yong Hoon Shin`,
+  },
   plugins: [
     `gatsby-plugin-styled-components`,
     {
-      resolve: 'gatsby-plugin-web-font-loader',
+      resolve: "gatsby-plugin-web-font-loader",
       options: {
         typekit: {
-          id: 'uoj3gty'
-        }
-      }
+          id: "uoj3gty",
+        },
+      },
     },
     {
-    resolve: "gatsby-plugin-react-svg",
-    options: {
-      rule: {
-        include: /images/ 
-      }
-    }
-  }
-  ]
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /images/,
+        },
+      },
+    },
+  ],
 }
