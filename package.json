@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-starter-hello-world",
+  "name": "Shin's Website",
   "private": true,
-  "description": "A simplified bare-bones starter for Gatsby",
+  "description": "Personal website & blog for Yong Hoon Shin",
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
@@ -32,9 +32,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-hello-world"
+    "url": "https://github.com/sarckk/personal-site"
   },
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
-  }
 }
