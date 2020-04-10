@@ -85,6 +85,10 @@ export const theme = {
     "56": "14rem",
     "64": "16rem",
   },
+  boxShadow: {
+    postPreview: "0px 3px 17px -2px rgba(222, 222, 222, 0.8)",
+    postPreviewHover: "0px 6px 17px 3px rgba(222, 222, 222, 0.8)",
+  },
 }
 
 export const GlobalStyle = createGlobalStyle`
