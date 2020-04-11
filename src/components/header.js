@@ -1,29 +1,45 @@
 import React, { useState, useRef, useEffect } from "react"
 import { UnstyledLink } from "./page-elements"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import SearchIcon from "../images/search.svg"
 import { useStaticQuery, graphql } from "gatsby"
 import { throttle } from "lodash"
 
 const HeaderContainer = styled.div`
-  display: flex;
   position: fixed;
   top: 0;
-  width: 800px;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 5px;
+  width: 100%;
   transition: transform 0.4s ease;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.gray[500]};
-  z-index: 2;
+  z-index: 3;
   transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
+  ${props =>
+    props.scrolledDown &&
+    css`
+      border-bottom: 1px solid ${({ theme }) => theme.colors.gray[300]};
+    `}
+`
+
+const HeaderContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 5px;
+  max-width: 850px;
+  margin: 0 auto;
+  ${props =>
+    !props.scrolledDown &&
+    css`
+      border-bottom: 1px solid ${({ theme }) => theme.colors.gray[300]};
+    `}
+  position: relative;
 `
 
 const SiteTitle = styled(UnstyledLink)`
   font-size: ${({ theme }) => theme.fontSize["2xl"]};
   margin-right: auto;
+  z-index: 2;
 `
 
 const HeaderNav = styled.ul`
@@ -31,6 +47,7 @@ const HeaderNav = styled.ul`
   display: flex;
   align-items: center;
   height: 27px;
+  z-index: 2;
 `
 
 const HeaderLI = styled.li`
@@ -98,7 +115,7 @@ const SearchPanel = styled.div`
   width: 60%;
   height: 40px;
   opacity: ${props => (props.visible ? "1" : "0")};
-  z-index: ${props => (props.visible ? "1" : "-1")};
+  z-index: ${props => (props.visible ? "2" : "-1")};
   transition: all ${props => (props.visible ? "300ms" : "0ms")} ease-out;
   transition-delay: ${props => (props.visible ? "560ms" : "100ms")};
   transform: ${props => (props.visible ? "translateX(0)" : "translateX(2%)")};
@@ -115,7 +132,7 @@ const SearchInput = styled.input`
   border: 0;
   padding: 0 5px;
   font-family: ${({ theme }) => theme.font.sans};
-  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-size: ${({ theme }) => theme.fontSize.base};
   background-color: ${({ theme }) => theme.colors.transparent};
 
   &:focus {
@@ -124,6 +141,7 @@ const SearchInput = styled.input`
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray[600]};
+    font-size: ${({ theme }) => theme.fontSize.base};
   }
 `
 
@@ -138,6 +156,24 @@ const SearchIcon17pxGray = styled(SearchIcon17px)`
   }
 `
 
+const SearchCloseBar = styled.div`
+  height: 16px;
+  width: 1px;
+  background-color: ${({ theme }) => theme.colors.gray[600]};
+  position: absolute;
+  top: calc(50% - 8px);
+  left: 50%;
+  transition: all 0.3s ease;
+`
+
+const SearchCloseLeft = styled(SearchCloseBar)`
+  transform: rotate(-45deg) translateX(-50%);
+`
+
+const SearchCloseRight = styled(SearchCloseBar)`
+  transform: rotate(45deg) translateX(-50%);
+`
+
 const SearchClose = styled.button`
   position: relative;
   background-color: ${({ theme }) => theme.colors.transparent};
@@ -150,33 +186,28 @@ const SearchClose = styled.button`
   &:focus {
     outline: none;
   }
-`
 
-const SearchCloseBar = styled.div`
-  height: 16px;
-  width: 1px;
-  background-color: ${({ theme }) => theme.colors.gray[600]};
-  position: absolute;
-  top: calc(50% - 8px);
-  left: 50%;
-`
-
-const SearchCloseLeft = styled(SearchCloseBar)`
-  transform: rotate(-45deg) translateX(-50%);
-`
-
-const SearchCloseRight = styled(SearchCloseBar)`
-  transform: rotate(45deg) translateX(-50%);
+  &:hover {
+    div {
+      background-color: ${({ theme }) => theme.colors.gray[500]};
+    }
+  }
 `
 
 export default () => {
   const [searchVisible, setSearchVisible] = useState(false)
+  const [scrolledDown, setScrolledDown] = useState(false)
   const [hideHeader, setHideHeader] = useState(false)
   const searchInput = useRef(null)
 
   const toggleSearch = () => {
-    setSearchVisible(!searchVisible)
-    searchInput.current.focus()
+    setSearchVisible(searchVisible => !searchVisible)
+
+    if (!searchVisible) {
+      searchInput.current.focus()
+    } else {
+      setTimeout(() => (searchInput.current.value = ""), 200)
+    }
   }
 
   const data = useStaticQuery(
@@ -196,10 +227,13 @@ export default () => {
 
     const throttledScrollHandler = throttle(() => {
       const currentScrollOffset = window.pageYOffset
-      const scrolledMin = currentScrollOffset > 30
+      const scrolledMinToHide = currentScrollOffset > 60
       const isScrolledDown = prevScrollOffset < currentScrollOffset
       prevScrollOffset = currentScrollOffset
-      setHideHeader(isScrolledDown && scrolledMin)
+      setHideHeader(isScrolledDown && scrolledMinToHide)
+
+      const scrolledMinToAddBorder = currentScrollOffset > 0
+      setScrolledDown(scrolledMinToAddBorder)
     }, 250)
 
     window.addEventListener("scroll", throttledScrollHandler)
@@ -211,39 +245,41 @@ export default () => {
   }, [])
 
   return (
-    <HeaderContainer hide={hideHeader}>
-      <SiteTitle to="/">{data.site.siteMetadata.title}</SiteTitle>
+    <HeaderContainer hide={hideHeader} scrolledDown={scrolledDown}>
+      <HeaderContent scrolledDown={scrolledDown}>
+        <SiteTitle to="/">{data.site.siteMetadata.title}</SiteTitle>
 
-      <HeaderNav>
-        <ListItem to="/about" visible={searchVisible}>
-          about
-        </ListItem>
-        <ListItem to="/work" visible={searchVisible}>
-          work
-        </ListItem>
-        <ListItem to="/blog" visible={searchVisible}>
-          blog
-        </ListItem>
-        <ListItem to="/books" visible={searchVisible}>
-          books
-        </ListItem>
-        <HeaderLI visible={searchVisible}>
-          <SearchButton onClick={toggleSearch}>
-            <SearchIcon17px />
-          </SearchButton>
-        </HeaderLI>
-      </HeaderNav>
+        <HeaderNav>
+          <ListItem to="/about" visible={searchVisible}>
+            about
+          </ListItem>
+          <ListItem to="/work" visible={searchVisible}>
+            work
+          </ListItem>
+          <ListItem to="/blog" visible={searchVisible}>
+            blog
+          </ListItem>
+          <ListItem to="/books" visible={searchVisible}>
+            books
+          </ListItem>
+          <HeaderLI visible={searchVisible}>
+            <SearchButton onClick={toggleSearch}>
+              <SearchIcon17px />
+            </SearchButton>
+          </HeaderLI>
+        </HeaderNav>
 
-      <SearchPanel visible={searchVisible}>
-        <SearchIcon17pxGray />
-        <SearchForm>
-          <SearchInput placeholder="Start searching..." ref={searchInput} />
-        </SearchForm>
-        <SearchClose onClick={toggleSearch}>
-          <SearchCloseLeft />
-          <SearchCloseRight />
-        </SearchClose>
-      </SearchPanel>
+        <SearchPanel visible={searchVisible}>
+          <SearchIcon17pxGray />
+          <SearchForm>
+            <SearchInput placeholder="Start searching..." ref={searchInput} />
+          </SearchForm>
+          <SearchClose onClick={toggleSearch}>
+            <SearchCloseLeft />
+            <SearchCloseRight />
+          </SearchClose>
+        </SearchPanel>
+      </HeaderContent>
     </HeaderContainer>
   )
 }

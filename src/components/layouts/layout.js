@@ -21,10 +21,12 @@ const ContentArea = styled.main`
 
 export default ({ children }) => {
   return (
-    <Container>
+    <div>
       <Header />
-      <ContentArea>{children}</ContentArea>
+      <Container>
+        <ContentArea>{children}</ContentArea>
+      </Container>
       <Footer />
-    </Container>
+    </div>
   )
 }
