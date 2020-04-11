@@ -3,11 +3,12 @@ import Avatar from "../components/avatar"
 import HomeNav from "../components/home_nav"
 import styled from "styled-components"
 import HomeLayout from "../components/layouts/home_layout"
+import { H1 } from "../components/page-elements"
+import { throttle } from "lodash"
 
-const Heading = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize["5xl"]};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+const Heading = styled(H1)`
   margin-bottom: ${({ theme }) => theme.spacing["0"]};
+  font-family: ${({ theme }) => theme.font.serif};
 `
 
 export default () => {
@@ -73,9 +74,11 @@ export default () => {
       )
     }
 
-    window.addEventListener("mousemove", moveEyes)
+    const throttledMoveEyes = throttle(moveEyes, 20)
 
-    return () => window.removeEventListener("mousemove", moveEyes)
+    window.addEventListener("mousemove", throttledMoveEyes)
+
+    return () => window.removeEventListener("mousemove", throttledMoveEyes)
   }, [])
 
   return (
