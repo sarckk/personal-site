@@ -3,7 +3,7 @@ backend:
   repo: sarckk/personal-site
  
 
-media_folder: static/assets
+media_folder: content/assets
 public_folder: assets
 
 collections:
@@ -15,5 +15,6 @@ collections:
       - { label: "Published Date", name: date, label: Date, widget: date }
       - { label: "Title", name: title, label: Title }
       - { label: "Description", name: description, label: Description }
-      - { label: "Featured Image", name: "featuredimage", widget: image}
+      - {label: "Hidden", name: is_hidden, widget: "boolean", default: false}
+      - { label: "Featured Image", name: featuredImage, widget: image}
       - { label: "Body", name: body, label: Body, widget: markdown }
