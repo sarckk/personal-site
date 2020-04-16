@@ -4,12 +4,13 @@ import reset from "styled-reset"
 // theme settings from tailwind-full.config in tailwindcss/designing-with-tailwindcss
 export const theme = {
   font: {
-    serif: "skolar-latin, serif",
+    serif: "Charter, serif",
     sans: "aktiv-grotesk, sans-serif",
+    alternateSerif: "skolar-latin, serif",
   },
   fontSize: {
     xs: "0.75rem",
-    sm: "0.875rem",
+    sm: "0.95rem",
     base: "1rem",
     lg: "1.125rem",
     xl: "1.25rem",
@@ -20,7 +21,6 @@ export const theme = {
     "6xl": "4rem",
   },
   fontWeight: {
-    hairline: "100",
     thin: "200",
     light: "300",
     normal: "400",
@@ -33,7 +33,7 @@ export const theme = {
   colors: {
     transparent: "transparent",
 
-    black: "#000",
+    black: "#191919",
     white: "#fff",
 
     gray: {
@@ -47,6 +47,11 @@ export const theme = {
       800: "#2d3748",
       900: "#1a202c",
     },
+
+    anchorColor: "#3370FC",
+    anchorHover: "#4F8DFC",
+    selectionFontColor: "#ECEDEF",
+    selectionBGColor: "#575757",
   },
   letterSpacing: {
     tighter: "-0.05em",
@@ -101,7 +106,7 @@ export const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
     color: ${({ theme }) => theme.colors.black}; 
     font-family: ${({ theme }) => theme.font.serif}; 
-    font-size: ${({ theme }) => theme.fontSize.base};
+    font-size: ${({ theme }) => theme.fontSize.sm};
     font-weight: ${({ theme }) => theme.fontWeight.normal};
      -webkit-font-smoothing: antialiased;
      -moz-osx-font-smoothing: grayscale;
@@ -127,4 +132,51 @@ export const GlobalStyle = createGlobalStyle`
     width: 100%;
   }
 
+  em{
+    // too lazy to create separate component for this
+    font-style: italic;
+  }
+
+  sup{
+    vertical-align: super;
+    font-size: ${({ theme }) => theme.fontSize.xs};
+  }
+
+  table{
+    margin:${({ theme }) => theme.spacing["0"]} 0 ${({ theme }) =>
+  theme.spacing["8"]} 0;
+  }
+
+  td, th{
+   padding: 0.5rem; 
+   text-align: left;
+  }
+
+  tr:nth-child(even){
+    background-color:${({ theme }) => theme.colors.gray[100]};
+  }
+
+  th{
+    font-family: ${({ theme }) => theme.font.sans};
+    font-size: ${({ theme }) => theme.fontSize.lg};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.black};
+  }
+
+  td{
+    font-size: ${({ theme }) => theme.fontSize.base};
+  }
+
+  ::selection{
+     background: ${({ theme }) => theme.colors.selectionBGColor}; 
+     color: ${({ theme }) => theme.colors.selectionFontColor};
+  }
+
+  ::-moz-selection{
+     background: ${({ theme }) => theme.colors.selectionBGColor}; 
+     color: ${({ theme }) => theme.colors.selectionFontColor};
+  }
+
+  h1,h2,h3,h4,h5,h6{
+    font-family: ${({ theme }) => theme.font.sans};
+  }
 `
