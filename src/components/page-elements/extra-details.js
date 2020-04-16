@@ -1,6 +1,6 @@
 import styled from "styled-components"
 
-export const PostDate = styled.div`
+export const ExtraDetails = styled.div`
   color: ${({ theme }) => theme.colors.gray[500]};
   font-size: ${({ theme }) => theme.fontSize.xxs};
   letter-spacing: ${({ theme }) => theme.letterSpacing.widest};

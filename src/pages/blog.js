@@ -1,6 +1,7 @@
+import React from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
-import { PostDate } from "../components/page-elements"
+import { ExtraDetails } from "../components/page-elements"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
 
@@ -64,6 +65,7 @@ export default ({ data }) => {
   return (
     <Layout>
       {data.allMdx.edges.map(({ node }) => {
+        console.log(node.timeToRead)
         const description = node.frontmatter.description
         const truncatedDesc =
           description.length > DESC_PRUNE_LENGTH
@@ -76,7 +78,12 @@ export default ({ data }) => {
           <BlogPost to={node.fields.slug}>
             <PostDetails>
               <PostTitle>{node.frontmatter.title}</PostTitle>
-              <PostDate>{node.frontmatter.date.toUpperCase()}</PostDate>
+              <ExtraDetails>
+                <span style={{ marginRight: "10px" }}>
+                  {node.frontmatter.date.toUpperCase()}
+                </span>
+                <span>{node.timeToRead} MIN READ</span>
+              </ExtraDetails>
               <PostDesc>{truncatedDesc}</PostDesc>
             </PostDetails>
             <PostThumbnail>
@@ -112,6 +119,7 @@ export const query = graphql`
               }
             }
           }
+          timeToRead
           fields {
             slug
           }

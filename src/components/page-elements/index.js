@@ -11,7 +11,7 @@ export * from "./hr"
 
 // custom page elements
 export * from "./unstyled-link"
-export * from "./post-date"
+export * from "./extra-details"
 
 // custom blog elements
 export * from "./full-width-div"

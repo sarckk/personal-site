@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layouts/layout"
 import Img from "gatsby-image"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { PostDate, Headings, HR } from "../components/page-elements"
+import { ExtraDetails, Headings, HR } from "../components/page-elements"
 import styled from "styled-components"
 
 const PostDetails = styled.div`
@@ -34,11 +34,9 @@ const Description = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing["3"]};
 `
 
-const LargePostDate = styled(PostDate)`
-  font-size: ${({ theme }) => theme.fontSize.xs};
+const MarginExtraDetails = styled(ExtraDetails)`
   margin-top: ${({ theme }) => theme.spacing["6"]};
   margin-bottom: ${({ theme }) => theme.spacing["10"]};
-  letter-spacing: 0.023em;
 `
 
 const FeatureImage = styled(Img)`
@@ -56,7 +54,10 @@ export default ({ data }) => {
         <TextDetails>
           <Title>{post.frontmatter.title}</Title>
           <Description>{post.frontmatter.description}</Description>
-          <LargePostDate>{post.frontmatter.date.toUpperCase()}</LargePostDate>
+          <MarginExtraDetails>
+            <div>{post.frontmatter.date.toUpperCase()}</div>
+            <div>{post.timeToRead} MIN READ</div>
+          </MarginExtraDetails>
         </TextDetails>
         <PostImage>
           <FeatureImage fluid={featuredImgFluid} />
@@ -72,6 +73,7 @@ export const query = graphql`
   query($slug: String!) {
     mdx(fields: { slug: { eq: $slug } }) {
       body
+      timeToRead
       frontmatter {
         date(formatString: "MMM DD, YYYY")
         title
