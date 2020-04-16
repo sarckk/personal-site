@@ -4,29 +4,35 @@ import Header from "../header"
 import Footer from "../footer"
 
 const Container = styled.div`
-  width: 850px;
-  margin: 0 auto;
-  padding-top: 100px;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 `
 
-const ContentArea = styled.main`
+const Content = styled.div`
+  padding-top: 90px;
   flex: 1 0 auto;
-  width: 800px;
-  margin-bottom: ${({ theme }) => theme.spacing["20"]};
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(1em, 1fr) [main-start] 75px [para-start] minmax(
+      0,
+      650px
+    )
+    [para-end] 75px [main-end] minmax(1em, 1fr) [full-end];
+  grid-auto-rows: minmax(min-content, max-content);
+  margin-bottom: 45px;
+
+  > * {
+    grid-column: main;
+  }
 `
 
 export default ({ children }) => {
   return (
-    <div>
+    <Container>
       <Header />
-      <Container>
-        <ContentArea>{children}</ContentArea>
-      </Container>
+      <Content>{children}</Content>
       <Footer />
-    </div>
+    </Container>
   )
 }

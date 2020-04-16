@@ -6,5 +6,5 @@ export const PostDate = styled.div`
   letter-spacing: ${({ theme }) => theme.letterSpacing.wide};
   font-family: ${({ theme }) => theme.font.sans};
   margin-top: ${({ theme }) => theme.spacing["2"]};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
 `

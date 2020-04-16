@@ -14,6 +14,7 @@ const HeaderContainer = styled.div`
   transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
   background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(5px);
+  font-family: ${({ theme }) => theme.font.alternateSerif};
   ${props =>
     props.scrolledDown &&
     css`
@@ -133,7 +134,6 @@ const SearchInput = styled.input`
   height: 100%;
   border: 0;
   padding: 0 5px;
-  font-family: ${({ theme }) => theme.font.sans};
   font-size: ${({ theme }) => theme.fontSize.base};
   background-color: ${({ theme }) => theme.colors.transparent};
 
