@@ -1,93 +1,49 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layouts/layout"
-import {
-  PostDate,
-  Headings,
-  BlockQuote,
-  PRE,
-  P,
-  STRONG,
-  StyledAnchor,
-  UL,
-  OL,
-  LI,
-  FullWidthDiv,
-  RightHandContent,
-  LeftHandContent,
-  MainWidthContent,
-  ParaWidthContent,
-  LeftCaption,
-  RightCaption,
-} from "../components/page-elements"
-import styled from "styled-components"
 import Img from "gatsby-image"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { MDXProvider } from "@mdx-js/react"
+import { PostDate, Headings, HR } from "../components/page-elements"
+import styled from "styled-components"
 
-const Title = styled(Headings.H1)`
-  margin-bottom: ${({ theme }) => theme.spacing["0"]};
-  text-align: center;
+const PostDetails = styled.div`
+  display: flex;
+`
+
+const TextDetails = styled.div`
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-right: ${({ theme }) => theme.spacing["3"]};
+`
+
+const PostImage = styled.div`
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding-right: ${({ theme }) => theme.spacing["3"]};
+`
+
+const Title = styled(Headings.H2)`
+  margin-top: 0;
+  margin-bottom: ${({ theme }) => theme.spacing["2"]};
 `
 
 const Description = styled.div`
   font-family: ${({ theme }) => theme.font.sans};
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  max-width: 70%;
-  text-align: justify;
-  grid-column: para;
-  margin: 0 auto ${({ theme }) => theme.spacing["4"]};
-  color: ${({ theme }) => theme.colors.gray[600]};
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  color: ${({ theme }) => theme.colors.gray[700]};
+  margin-bottom: ${({ theme }) => theme.spacing["3"]};
 `
 
 const LargePostDate = styled(PostDate)`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  margin-bottom: ${({ theme }) => theme.spacing["8"]};
-  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  margin-top: ${({ theme }) => theme.spacing["6"]};
+  margin-bottom: ${({ theme }) => theme.spacing["10"]};
+  letter-spacing: 0.023em;
 `
 
 const FeatureImage = styled(Img)`
   margin-bottom: ${({ theme }) => theme.spacing["12"]};
-  box-shadow: 0px 40px 85px -20px rgba(117, 117, 117, 0.5);
 `
-
-const Content = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  line-height: ${({ theme }) => theme.lineHeight.relaxed};
-  grid-column: full;
-  display: grid;
-  grid-template-columns: inherit;
-  grid-auto-rows: inherit;
-
-  > * {
-    grid-column: para;
-  }
-`
-
-const mdxComponentBindings = {
-  h1: Headings.H1,
-  h2: Headings.H2,
-  h3: Headings.H3,
-  h4: Headings.H4,
-  h5: Headings.H5,
-  h6: Headings.H6,
-  p: P,
-  strong: STRONG,
-  a: StyledAnchor,
-  ul: UL,
-  ol: OL,
-  li: LI,
-  blockquote: BlockQuote,
-  pre: PRE,
-  FullWidthDiv,
-  RightHandContent,
-  LeftHandContent,
-  MainWidthContent,
-  ParaWidthContent,
-  LeftCaption,
-  RightCaption,
-  wrapper: Content,
-}
 
 export default ({ data }) => {
   const post = data.mdx
@@ -96,13 +52,18 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Title>{post.frontmatter.title}</Title>
-      <Description>{post.frontmatter.description}</Description>
-      <LargePostDate>{post.frontmatter.date.toUpperCase()}</LargePostDate>
-      <FeatureImage fluid={featuredImgFluid} />
-      <MDXProvider components={mdxComponentBindings}>
-        <MDXRenderer>{post.body}</MDXRenderer>
-      </MDXProvider>
+      <PostDetails>
+        <TextDetails>
+          <Title>{post.frontmatter.title}</Title>
+          <Description>{post.frontmatter.description}</Description>
+          <LargePostDate>{post.frontmatter.date.toUpperCase()}</LargePostDate>
+        </TextDetails>
+        <PostImage>
+          <FeatureImage fluid={featuredImgFluid} />
+        </PostImage>
+      </PostDetails>
+      <HR />
+      <MDXRenderer>{post.body}</MDXRenderer>
     </Layout>
   )
 }
@@ -117,7 +78,7 @@ export const query = graphql`
         description
         featuredImage {
           childImageSharp {
-            fluid(maxWidth: 800) {
+            fluid(maxWidth: 400) {
               ...GatsbyImageSharpFluid
             }
           }
