@@ -1,4 +1,3 @@
-import React from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { PostDate } from "../components/page-elements"
@@ -22,7 +21,7 @@ const BlogPost = styled(Link)`
 `
 
 const PostTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSize["3xl"]};
+  font-size: ${({ theme }) => theme.fontSize["2xl"]};
   font-family: ${({ theme }) => theme.font.sans};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   line-height: ${({ theme }) => theme.lineHeight.tight};
@@ -38,7 +37,7 @@ const PostDetails = styled.div`
 
 const PostDesc = styled.p`
   margin-top: ${({ theme }) => theme.spacing["4"]};
-  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
 `
 
 const PostThumbnail = styled.div`
@@ -47,6 +46,8 @@ const PostThumbnail = styled.div`
   align-items: center;
   justify-content: center;
 `
+
+const DESC_PRUNE_LENGTH = 100
 
 export default ({ data }) => {
   console.log("Does allMdx exist: ", data.allMdx)
@@ -65,8 +66,8 @@ export default ({ data }) => {
       {data.allMdx.edges.map(({ node }) => {
         const description = node.frontmatter.description
         const truncatedDesc =
-          description.length > 100
-            ? description.slice(0, 100) + "..."
+          description.length > DESC_PRUNE_LENGTH
+            ? description.slice(0, DESC_PRUNE_LENGTH) + "..."
             : description
         let featuredImgFixed =
           node.frontmatter.featuredImage.childImageSharp.fixed
