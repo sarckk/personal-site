@@ -1,7 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
-import { H1, P, UnstyledLink } from "../components/page-elements"
+import { Headings, P, UnstyledLink } from "../components/page-elements"
+
+const SerifH1 = styled(Headings.H1)`
+  font-family: ${({ theme }) => theme.font.serif};
+`
 
 const StyledLink = styled(UnstyledLink)`
   font-weight: ${({ theme }) => theme.fontWeight.bold};
@@ -10,12 +14,12 @@ const StyledLink = styled(UnstyledLink)`
 export default () => {
   return (
     <Layout>
-      <H1>Hey, I'm Shin</H1>
+      <SerifH1>Hey, I'm Shin</SerifH1>
       <P>I study Computer Science at University College London, UK.</P>
       <P>
         I'm passionate about developing cool things with code, ranging from
         applications to art. To me, programming is first and foremost a tool - a
-        tool that enables us to revel in endlessly creative pursuits!
+        tool that enables creative pursuits of all kinds!
       </P>
       <P>
         Anyways, you might be thinking:{" "}

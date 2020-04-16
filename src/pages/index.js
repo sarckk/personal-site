@@ -3,12 +3,14 @@ import Avatar from "../components/avatar"
 import HomeNav from "../components/home_nav"
 import styled from "styled-components"
 import HomeLayout from "../components/layouts/home_layout"
-import { H1 } from "../components/page-elements"
 import { throttle } from "lodash"
 
-const Heading = styled(H1)`
+const Heading = styled.div`
+  font-size: ${({ theme }) => theme.fontSize["5xl"]};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  margin-top: ${({ theme }) => theme.spacing["7"]};
   margin-bottom: ${({ theme }) => theme.spacing["0"]};
-  font-family: ${({ theme }) => theme.font.serif};
+  font-family: ${({ theme }) => theme.font.alternateSerif};
 `
 
 export default () => {
