@@ -25,13 +25,23 @@ module.exports = {
       resolve: `gatsby-plugin-mdx`,
       options: {
         extensions: [`.mdx`, `.md`],
-        plugins: [`gatsby-remark-relative-images`, `gatsby-remark-images`],
+        plugins: [
+          `gatsby-remark-relative-images`,
+          `gatsby-remark-images`,
+          `gatsby-remark-prismjs`,
+        ],
         gatsbyRemarkPlugins: [
           `gatsby-remark-relative-images`,
           {
             resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 1920,
+            },
+          },
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              aliases: { sh: "bash", js: "javascript" },
             },
           },
         ],

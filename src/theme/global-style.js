@@ -106,7 +106,7 @@ export const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
     color: ${({ theme }) => theme.colors.black}; 
     font-family: ${({ theme }) => theme.font.serif}; 
-    font-size: ${({ theme }) => theme.fontSize.sm};
+    font-size: ${({ theme }) => theme.fontSize.base};
     font-weight: ${({ theme }) => theme.fontWeight.normal};
      -webkit-font-smoothing: antialiased;
      -moz-osx-font-smoothing: grayscale;
@@ -178,5 +178,15 @@ export const GlobalStyle = createGlobalStyle`
 
   h1,h2,h3,h4,h5,h6{
     font-family: ${({ theme }) => theme.font.sans};
+  }
+
+  // styling for div rendered by PrismJS
+  .gatsby-highlight{
+    margin: ${({ theme }) => theme.spacing["4"]}; 0;
+    overflow: auto;
+
+    pre {
+     border-radius: ${({ theme }) => theme.spacing["2"]}; 
+    }
   }
 `
