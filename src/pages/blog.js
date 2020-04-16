@@ -7,7 +7,7 @@ import Img from "gatsby-image"
 
 const BlogPost = styled(Link)`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   cursor: pointer;
   text-decoration: none;
   color: ${({ theme }) => theme.colors.black};
@@ -28,27 +28,41 @@ const PostTitle = styled.div`
 `
 
 const PostDetails = styled.div`
-  padding: 2rem 5rem 2rem 3rem;
-  flex: 1 1 0;
+  padding: 3rem 4rem;
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
 
 const PostDesc = styled.p`
   margin-top: ${({ theme }) => theme.spacing["4"]};
-  font-family: ${({ theme }) => theme.font.sans};
+  font-size: ${({ theme }) => theme.fontSize.lg};
 `
 
 const PostThumbnail = styled.div`
-  flex: 1 0 0;
+  flex: 1 0 50%;
 `
 
 export default ({ data }) => {
+  console.log("Does allMdx exist: ", data.allMdx)
+  const edges = data.allMdx ? data.allMdx.edges : []
+
+  if (edges.length === 0) {
+    return (
+      <Layout>
+        <div>There are no posts. Come back later!</div>
+      </Layout>
+    )
+  }
+
   return (
     <Layout>
-      {data.allMarkdownRemark.edges.map(({ node }) => {
+      {data.allMdx.edges.map(({ node }) => {
         const description = node.frontmatter.description
         const truncatedDesc =
-          description.length > 40
-            ? description.slice(0, 40) + "..."
+          description.length > 100
+            ? description.slice(0, 100) + "..."
             : description
         let featuredImgFluid =
           node.frontmatter.featuredImage.childImageSharp.fluid
@@ -72,7 +86,10 @@ export default ({ data }) => {
 
 export const query = graphql`
   query {
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { is_hidden: { ne: true } } }
+    ) {
       edges {
         node {
           frontmatter {
@@ -81,8 +98,8 @@ export const query = graphql`
             description
             featuredImage {
               childImageSharp {
-                fluid(maxWidth: 500, maxHeight: 400) {
-                  ...GatsbyImageSharpFluid
+                fluid(maxWidth: 280) {
+                  ...GatsbyImageSharpFluid_tracedSVG
                 }
               }
             }

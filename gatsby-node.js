@@ -6,14 +6,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions
   fmImagesToRelative(node)
 
-  if (node.internal.type === `MarkdownRemark`) {
-    console.log(node)
+  if (node.internal.type === `Mdx`) {
     const slug = createFilePath({ node, getNode })
 
     createNodeField({
       node,
       name: `slug`,
-      value: slug,
+      value: `/blog${slug}`,
     })
   }
 }
@@ -23,7 +22,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const result = await graphql(`
     query {
-      allMarkdownRemark {
+      allMdx {
         edges {
           node {
             fields {
@@ -35,7 +34,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     }
   `)
 
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`)
+    return
+  }
+
+  result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
       component: path.resolve(`./src/templates/blog-post.js`),

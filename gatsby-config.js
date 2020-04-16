@@ -1,9 +1,3 @@
-/**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.org/docs/gatsby-config/
- */
-
 module.exports = {
   siteMetadata: {
     title: `yonghoonshin`,
@@ -11,11 +5,13 @@ module.exports = {
     author: `Yong Hoon Shin`,
   },
   plugins: [
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: "images",
-        path: `${__dirname}/static/assets`,
+        path: `${__dirname}/content/assets`,
       },
     },
     {
@@ -26,26 +22,30 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-transformer-remark`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        plugins: [
+        extensions: [`.mdx`, `.md`],
+        plugins: [`gatsby-remark-relative-images`, `gatsby-remark-images`],
+        gatsbyRemarkPlugins: [
           `gatsby-remark-relative-images`,
           {
             resolve: `gatsby-remark-images`,
             options: {
-              maxWidth: 600,
+              maxWidth: 1920,
             },
           },
         ],
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     `gatsby-plugin-netlify-cms`,
     `gatsby-plugin-styled-components`,
     {
       resolve: "gatsby-plugin-web-font-loader",
       options: {
+        custom: {
+          families: ["Charter"],
+          urls: ["/fonts/fonts.css"],
+        },
         typekit: {
           id: "uoj3gty",
         },
