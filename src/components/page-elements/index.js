@@ -7,6 +7,7 @@ export * from "./ol"
 export * from "./list-item"
 export * from "./blockquote"
 export * from "./pre"
+export * from "./hr"
 
 // custom page elements
 export * from "./unstyled-link"

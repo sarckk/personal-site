@@ -9,6 +9,7 @@ export const theme = {
     alternateSerif: "skolar-latin, serif",
   },
   fontSize: {
+    xxs: "0.6rem",
     xs: "0.75rem",
     sm: "0.95rem",
     base: "1rem",
