@@ -14,6 +14,7 @@ const BlogPost = styled(Link)`
   transition: all 0.3s ease;
   width: 100%;
   box-shadow: ${({ theme }) => theme.boxShadow.postPreview};
+  height: 250px;
 
   :hover {
     box-shadow ${({ theme }) => theme.boxShadow.postPreviewHover};
@@ -42,6 +43,9 @@ const PostDesc = styled.p`
 
 const PostThumbnail = styled.div`
   flex: 1 0 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 export default ({ data }) => {
@@ -64,8 +68,8 @@ export default ({ data }) => {
           description.length > 100
             ? description.slice(0, 100) + "..."
             : description
-        let featuredImgFluid =
-          node.frontmatter.featuredImage.childImageSharp.fluid
+        let featuredImgFixed =
+          node.frontmatter.featuredImage.childImageSharp.fixed
 
         return (
           <BlogPost to={node.fields.slug}>
@@ -75,7 +79,10 @@ export default ({ data }) => {
               <PostDesc>{truncatedDesc}</PostDesc>
             </PostDetails>
             <PostThumbnail>
-              <Img fluid={featuredImgFluid} />
+              <Img
+                fixed={featuredImgFixed}
+                imgStyle={{ objectFit: "contain" }}
+              />
             </PostThumbnail>
           </BlogPost>
         )
@@ -98,8 +105,8 @@ export const query = graphql`
             description
             featuredImage {
               childImageSharp {
-                fluid(maxWidth: 280) {
-                  ...GatsbyImageSharpFluid_tracedSVG
+                fixed(width: 250, height: 250) {
+                  ...GatsbyImageSharpFixed_tracedSVG
                 }
               }
             }
