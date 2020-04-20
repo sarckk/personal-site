@@ -7,6 +7,8 @@ const FooterContainer = styled.div`
   margin-bottom: 20px;
   flex-shrink: 0;
   font-family: ${({ theme }) => theme.font.alternateSerif};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.gray[600]};
 `
 
 export default () => {

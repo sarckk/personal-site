@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const Content = styled.div`
+export const Content = styled.div`
   padding-top: 90px;
   flex: 1 0 auto;
   display: grid;

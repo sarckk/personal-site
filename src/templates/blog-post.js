@@ -3,8 +3,17 @@ import { graphql } from "gatsby"
 import Layout from "../components/layouts/layout"
 import Img from "gatsby-image"
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import { MDXProvider } from "@mdx-js/react"
 import { ExtraDetails, Headings, HR } from "../components/page-elements"
+import MDX from "mdx-scoped-runtime"
 import styled from "styled-components"
+import {
+  CMS_WRAPPER,
+  CMS_SHORTCODES,
+  CMS_COMPONENTS,
+} from "../cms/cms-components"
+import { ConditionalWrapper } from "../components/conditional-wrapper"
+import { Content } from "../components/layouts/layout"
 
 const PostDetails = styled.div`
   display: flex;
@@ -13,7 +22,7 @@ const PostDetails = styled.div`
 const TextDetails = styled.div`
   flex: 0 0 50%;
   max-width: 50%;
-  padding-right: ${({ theme }) => theme.spacing["3"]};
+  padding: 0 ${({ theme }) => theme.spacing["3"]};
 `
 
 const PostImage = styled.div`
@@ -43,28 +52,78 @@ const FeatureImage = styled(Img)`
   margin-bottom: ${({ theme }) => theme.spacing["12"]};
 `
 
+export const BlogTemplate = ({
+  title,
+  description,
+  date,
+  timeToRead,
+  featuredImage,
+  body,
+  isPreview,
+}) => {
+  return (
+    <ConditionalWrapper
+      condition={isPreview}
+      wrapper={children => <Content>{children}</Content>}
+    >
+      <>
+        <PostDetails>
+          <TextDetails>
+            <Title>{title}</Title>
+            <Description>{description}</Description>
+            <MarginExtraDetails>
+              <div>{date}</div>
+              {!isPreview && <div>{timeToRead} MIN READ</div>}
+            </MarginExtraDetails>
+          </TextDetails>
+          <PostImage>
+            {isPreview ? (
+              <img src={featuredImage} alt="Featured" />
+            ) : (
+              <FeatureImage fluid={featuredImage} />
+            )}
+          </PostImage>
+        </PostDetails>
+        <HR />
+        {isPreview ? (
+          <MDX
+            components={{ ...CMS_COMPONENTS, ...CMS_WRAPPER }}
+            scope={CMS_SHORTCODES}
+          >
+            {body}
+          </MDX>
+        ) : (
+          <MDXProvider
+            components={{
+              ...CMS_SHORTCODES,
+              ...CMS_COMPONENTS,
+              ...CMS_WRAPPER,
+            }}
+          >
+            <MDXRenderer>{body}</MDXRenderer>
+          </MDXProvider>
+        )}
+      </>
+    </ConditionalWrapper>
+  )
+}
+
 export default ({ data }) => {
   const post = data.mdx
-  const featuredImgFluid =
+  const featuredImageFluid =
     data.mdx.frontmatter.featuredImage.childImageSharp.fluid
 
   return (
     <Layout>
-      <PostDetails>
-        <TextDetails>
-          <Title>{post.frontmatter.title}</Title>
-          <Description>{post.frontmatter.description}</Description>
-          <MarginExtraDetails>
-            <div>{post.frontmatter.date.toUpperCase()}</div>
-            <div>{post.timeToRead} MIN READ</div>
-          </MarginExtraDetails>
-        </TextDetails>
-        <PostImage>
-          <FeatureImage fluid={featuredImgFluid} />
-        </PostImage>
-      </PostDetails>
-      <HR />
-      <MDXRenderer>{post.body}</MDXRenderer>
+      <BlogTemplate
+        title={post.frontmatter.title}
+        description={post.frontmatter.description}
+        date={post.frontmatter.date.toUpperCase()}
+        timeToRead={post.timeToRead}
+        featuredImage={featuredImageFluid}
+        body={post.body}
+        isPreview={false}
+      />
     </Layout>
   )
 }

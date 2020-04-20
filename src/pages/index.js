@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import Avatar from "../components/avatar"
-import HomeNav from "../components/home_nav"
+import HomeNav from "../components/home-nav"
 import styled from "styled-components"
-import HomeLayout from "../components/layouts/home_layout"
+import HomeLayout from "../components/layouts/home-layout"
 import { throttle } from "lodash"
 
 const Heading = styled.div`

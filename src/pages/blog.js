@@ -51,7 +51,6 @@ const PostThumbnail = styled.div`
 const DESC_PRUNE_LENGTH = 100
 
 export default ({ data }) => {
-  console.log("Does allMdx exist: ", data.allMdx)
   const edges = data.allMdx ? data.allMdx.edges : []
 
   if (edges.length === 0) {

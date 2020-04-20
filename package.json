@@ -31,6 +31,7 @@
     "gatsby-source-filesystem": "^2.2.2",
     "gatsby-transformer-sharp": "^2.4.4",
     "lodash": "^4.17.15",
+    "mdx-scoped-runtime": "^0.7.4",
     "netlify-cms-app": "^2.12.5",
     "prismjs": "^1.20.0",
     "react": "^16.12.0",
