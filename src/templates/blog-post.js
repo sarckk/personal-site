@@ -72,7 +72,7 @@ export const BlogTemplate = ({
             <Title>{title}</Title>
             <Description>{description}</Description>
             <MarginExtraDetails>
-              <div>{date}</div>
+              <div>{date.toUpperCase()}</div>
               {!isPreview && <div>{timeToRead} MIN READ</div>}
             </MarginExtraDetails>
           </TextDetails>
@@ -118,7 +118,7 @@ export default ({ data }) => {
       <BlogTemplate
         title={post.frontmatter.title}
         description={post.frontmatter.description}
-        date={post.frontmatter.date.toUpperCase()}
+        date={post.frontmatter.date}
         timeToRead={post.timeToRead}
         featuredImage={featuredImageFluid}
         body={post.body}

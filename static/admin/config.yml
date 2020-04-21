@@ -2,14 +2,19 @@ backend:
   name: github
   repo: sarckk/personal-site
 
+
+local_backend: true
+
 media_folder: content/assets
-public_folder: assets
+public_folder: /
 publish_mode: editorial_workflow
 
 collections:
   - name: blog
     label: Blog
     folder: content/blog
+    extension: mdx
+    format: frontmatter
     create: true
     fields:
       - { label: Title, name: title }
@@ -18,10 +23,9 @@ collections:
           label: Date,
           name: date,
           widget: datetime,
-          default: "",
-          dateFormat: "DD.MM.YYYY",
-          timeFormat: "HH:mm",
-          format: "LLL",
+          dateFormat: "MMM DD, YYYY",
+          timeFormat: false,
+          format: "YYYY-MM-DD",
         }
       - { label: Hidden, name: is_hidden, widget: boolean, default: false }
       - { label: Image, name: featuredImage, widget: image }

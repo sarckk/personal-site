@@ -2,20 +2,6 @@ const { createFilePath } = require("gatsby-source-filesystem")
 const path = require("path")
 const { fmImagesToRelative } = require("gatsby-remark-relative-images")
 
-// exports.onCreateWebpackConfig = ({
-//   stage,
-//   getConfig,
-//   rules,
-//   loaders,
-//   actions,
-// }) => {
-//   actions.setWebpackConfig({
-//     node: {
-//       fs: "empty",
-//     },
-//   })
-// }
-
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions
   fmImagesToRelative(node)
@@ -36,7 +22,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   const result = await graphql(`
     query {
-      allMdx {
+      allMdx(filter: { frontmatter: { is_hidden: { ne: true } } }) {
         edges {
           node {
             fields {

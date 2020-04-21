@@ -15,7 +15,8 @@ const getUTCFormattedString = localDateString => {
 
 export const BlogPreviewTemplate = ({ entry, widgetFor, getAsset }) => {
   const dateString = entry.getIn(["data", "date"])
-  const postDate = dateString && getUTCFormattedString(dateString).toUpperCase()
+  const postDate = dateString && getUTCFormattedString(dateString)
+  console.log("postDate:", postDate)
   const body = widgetFor("body") && widgetFor("body").props.value
   const image = entry.getIn(["data", "featuredImage"])
   const featuredImage = getAsset(image).toString()
