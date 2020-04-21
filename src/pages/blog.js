@@ -15,6 +15,7 @@ const BlogPost = styled(Link)`
   width: 100%;
   box-shadow: ${({ theme }) => theme.boxShadow.postPreview};
   height: 250px;
+  margin: ${({ theme }) => theme.spacing["4"]} 0;
 
   :hover {
     box-shadow ${({ theme }) => theme.boxShadow.postPreviewHover};
