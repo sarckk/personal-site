@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { ExtraDetails } from "../components/page-elements"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
+import { Loader } from "../components/loader.js"
 
 const BlogPost = styled(Link)`
   display: flex;
@@ -51,8 +52,19 @@ const PostThumbnail = styled.div`
 
 const DESC_PRUNE_LENGTH = 100
 
-export default ({ data }) => {
+const BlogPreviewPage = ({ data }) => {
   const edges = data.allMdx ? data.allMdx.edges : []
+
+  const [postsToShow, setPostsToShow] = useState(5)
+  const [allPostsShown, setAllPostsShown] = useState(
+    postsToShow >= edges.length
+  )
+
+  const loadMorePosts = () => {
+    console.log("Loading more posts...")
+    setPostsToShow(postsToShow => postsToShow + 5)
+    setAllPostsShown(postsToShow + 5 >= edges.length)
+  }
 
   if (edges.length === 0) {
     return (
@@ -64,8 +76,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      {data.allMdx.edges.map(({ node }) => {
-        console.log(node.timeToRead)
+      {data.allMdx.edges.slice(0, postsToShow).map(({ node }, index) => {
         const description = node.frontmatter.description
         const truncatedDesc =
           description.length > DESC_PRUNE_LENGTH
@@ -75,7 +86,7 @@ export default ({ data }) => {
           node.frontmatter.featuredImage.childImageSharp.fixed
 
         return (
-          <BlogPost to={node.fields.slug}>
+          <BlogPost key={index} to={node.fields.slug}>
             <PostDetails>
               <PostTitle>{node.frontmatter.title}</PostTitle>
               <ExtraDetails>
@@ -95,9 +106,12 @@ export default ({ data }) => {
           </BlogPost>
         )
       })}
+      {!allPostsShown && <Loader onVisible={loadMorePosts} />}
     </Layout>
   )
 }
+
+export default BlogPreviewPage
 
 export const query = graphql`
   query {
