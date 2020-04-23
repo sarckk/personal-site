@@ -74,5 +74,9 @@ module.exports = {
         },
       },
     },
+    {
+      resolve: `gatsby-plugin-algolia`,
+      options: require("./gatsby-plugin-algolia-config.js"),
+    },
   ],
 }

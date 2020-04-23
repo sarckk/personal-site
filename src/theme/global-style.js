@@ -143,6 +143,10 @@ export const GlobalStyle = createGlobalStyle`
     font-size: ${({ theme }) => theme.fontSize.xs};
   }
 
+  strong{
+    font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  }
+
   table{
     margin:${({ theme }) => theme.spacing["0"]} 0 ${({ theme }) =>
   theme.spacing["8"]} 0;

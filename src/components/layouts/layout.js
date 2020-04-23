@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import Header from "../header"
+import Header from "../header/header"
 import Footer from "../footer"
 
 const Container = styled.div`

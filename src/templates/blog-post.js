@@ -12,7 +12,7 @@ import {
   CMS_SHORTCODES,
   CMS_COMPONENTS,
 } from "../cms/cms-components"
-import { ConditionalWrapper } from "../components/conditional-wrapper"
+import { ConditionalWrapper } from "../components/utils/conditional-wrapper"
 import { Content } from "../components/layouts/layout"
 
 const PostDetails = styled.div`

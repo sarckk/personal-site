@@ -4,7 +4,8 @@ import Layout from "../components/layouts/layout"
 import { ExtraDetails } from "../components/page-elements"
 import { graphql, Link } from "gatsby"
 import Img from "gatsby-image"
-import { Loader } from "../components/loader.js"
+import { Loader } from "../components/utils/loader"
+import { truncate } from "../util/truncate"
 
 const BlogPost = styled(Link)`
   display: flex;
@@ -78,10 +79,7 @@ const BlogPreviewPage = ({ data }) => {
     <Layout>
       {data.allMdx.edges.slice(0, postsToShow).map(({ node }, index) => {
         const description = node.frontmatter.description
-        const truncatedDesc =
-          description.length > DESC_PRUNE_LENGTH
-            ? description.slice(0, DESC_PRUNE_LENGTH) + "..."
-            : description
+        const truncatedDesc = truncate(description, DESC_PRUNE_LENGTH)
         let featuredImgFixed =
           node.frontmatter.featuredImage.childImageSharp.fixed
 

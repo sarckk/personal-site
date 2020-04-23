@@ -1,6 +1,5 @@
 export * from "./headings"
 export * from "./p"
-export * from "./strong"
 export * from "./styled-anchor"
 export * from "./ul"
 export * from "./ol"

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react"
 import Avatar from "../components/avatar"
-import HomeNav from "../components/home-nav"
 import styled from "styled-components"
 import HomeLayout from "../components/layouts/home-layout"
 import { throttle } from "lodash"
+import { Link } from "gatsby"
 
 const Heading = styled.div`
   font-size: ${({ theme }) => theme.fontSize["5xl"]};
@@ -12,6 +12,34 @@ const Heading = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing["0"]};
   font-family: ${({ theme }) => theme.font.alternateSerif};
 `
+
+const HomeNavContainer = styled.div`
+  display: flex;
+`
+
+const HomeLink = styled(Link)`
+  margin-right: ${({ theme }) => theme.spacing["2"]};
+  margin-left: ${({ theme }) => theme.spacing["2"]};
+  transition all 0.3s ease;
+  font-size: ${({ theme }) => theme.fontSize["2xl"]};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  font-family: ${({ theme }) => theme.font.alternateSerif};
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.black};
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.gray[600]};
+  }
+`
+
+const HomeNav = () => (
+  <HomeNavContainer>
+    <HomeLink to="/about">about</HomeLink>
+    <HomeLink to="/work">work</HomeLink>
+    <HomeLink to="/blog">blog</HomeLink>
+    <HomeLink to="/books">books</HomeLink>
+  </HomeNavContainer>
+)
 
 export default () => {
   useEffect(() => {

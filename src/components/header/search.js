@@ -1,0 +1,214 @@
+import React, { useRef, useState, useLayoutEffect } from "react"
+import algoliasearch from "algoliasearch/lite"
+import "instantsearch.css/themes/reset.css"
+import {
+  InstantSearch,
+  connectHits,
+  connectSearchBox,
+  Highlight,
+} from "react-instantsearch-dom"
+import styled from "styled-components"
+import { UnstyledLink, ExtraDetails } from "../page-elements"
+
+const searchClient = algoliasearch(
+  process.env.ALGOLIA_APP_ID,
+  process.env.ALGOLIA_SEARCH_KEY
+)
+
+// proxy for algoliasearch client to prevent sending user input to server
+// when query is initially empty
+const proxiedSearchClient = {
+  search(requests) {
+    if (requests.every(({ params }) => !params.query)) {
+      return Promise.resolve({
+        results: requests.map(() => ({
+          hits: [],
+          nbHits: 0,
+          nbPages: 0,
+          processingTimeMS: 0,
+        })),
+      })
+    }
+
+    return searchClient.search(requests)
+  },
+}
+
+const SearchArea = styled.div`
+  flex-grow: 1;
+  margin-left: 5px;
+  position: relative;
+  height: 25px;
+`
+
+const SearchForm = styled.form``
+
+const SearchInput = styled.input`
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0 5px;
+  font-size: ${({ theme }) => theme.fontSize.base};
+  background-color: ${({ theme }) => theme.colors.transparent};
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray[600]};
+    font-size: ${({ theme }) => theme.fontSize.base};
+  }
+`
+
+const HitBox = styled.div`
+  position: absolute;
+  top: 39px;
+  background-color: ${({ theme }) => theme.colors.white};
+  border-color: ${({ theme }) => theme.colors.gray[300]};
+  border-style: solid;
+  border-width: 0 1px 1px 1px;
+  box-shadow: 0px 25px 69px -36px rgba(133, 133, 133, 0.66);
+  display: ${props => (props.visible ? "block" : "none")};
+  overflow: overlay;
+  max-height: 603px;
+  width: 100%;
+
+  // credit: https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+`
+
+const Hit = styled.div`
+  background-color: white;
+  padding: ${({ theme }) => theme.spacing["6"]};
+  height: 200px;
+  position: relative;
+`
+
+const HitTitle = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-family: ${({ theme }) => theme.font.sans};
+  line-height: ${({ theme }) => theme.lineHeight.tight};
+  margin-top: ${({ theme }) => theme.spacing["2"]};
+`
+
+const HitDesc = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  margin-top: ${({ theme }) => theme.spacing["1"]};
+  font-family: ${({ theme }) => theme.font.sans};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`
+const HitDate = styled(ExtraDetails)`
+  position: absolute;
+  top: 0;
+  right: 14px;
+`
+
+const HitExcerpt = styled.p`
+  margin-top: ${({ theme }) => theme.spacing["4"]};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+`
+
+const HitSeparator = styled.div`
+  height: 1px;
+  width: 95%;
+  margin: 0 auto;
+  background-color: ${({ theme }) => theme.colors.gray[300]};
+`
+
+const Hits = connectHits(({ hits, visible }) => (
+  <>
+    {hits.length ? (
+      <HitBox visible={visible}>
+        {hits.map((hit, i, hits) => {
+          return (
+            <React.Fragment key={i}>
+              <Hit>
+                <UnstyledLink to={hit.path}>
+                  <HitTitle>
+                    <Highlight attribute="title" hit={hit} tagName="strong" />
+                  </HitTitle>
+                  <HitDesc>
+                    <Highlight
+                      attribute="description"
+                      hit={hit}
+                      tagName="strong"
+                    />
+                  </HitDesc>
+                  <HitDate>{hit.date.toUpperCase()}</HitDate>
+                </UnstyledLink>
+                <HitExcerpt>
+                  <Highlight attribute="excerpt" hit={hit} tagName="strong" />
+                </HitExcerpt>
+              </Hit>
+              {hits.length - 1 !== i && <HitSeparator />}
+            </React.Fragment>
+          )
+        })}
+      </HitBox>
+    ) : null}
+  </>
+))
+
+const SearchBox = connectSearchBox(
+  ({ currentRefinement, refine, forwardRef, clearText }) => {
+    useLayoutEffect(() => {
+      if (clearText) {
+        refine("")
+      }
+    }, [clearText, refine])
+
+    return (
+      <SearchForm>
+        <SearchInput
+          ref={forwardRef}
+          placeholder="Start searching..."
+          value={currentRefinement}
+          onChange={e => refine(e.currentTarget.value)}
+        />
+      </SearchForm>
+    )
+  }
+)
+
+const RefForwardedSearchBox = React.forwardRef((props, ref) => (
+  <SearchBox {...props} forwardRef={ref} />
+))
+
+export const Search = React.memo(({ visible }) => {
+  const searchInputRef = useRef(null)
+  const [clearText, setClearText] = useState(true)
+
+  useLayoutEffect(() => {
+    if (visible) {
+      setClearText(false)
+      searchInputRef.current.focus()
+    } else {
+      setTimeout(() => setClearText(true), 200)
+    }
+  }, [visible])
+
+  return (
+    <SearchArea>
+      <InstantSearch
+        indexName={process.env.ALGOLIA_INDEX_NAME}
+        searchClient={proxiedSearchClient}
+      >
+        <RefForwardedSearchBox ref={searchInputRef} clearText={clearText} />
+        <Hits visible={visible} />
+      </InstantSearch>
+    </SearchArea>
+  )
+})
