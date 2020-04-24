@@ -1,6 +1,5 @@
 export * from "./headings"
 export * from "./p"
-export * from "./styled-anchor"
 export * from "./ul"
 export * from "./ol"
 export * from "./list-item"
@@ -10,6 +9,7 @@ export * from "./hr"
 
 // custom page elements
 export * from "./unstyled-link"
+export { StyledAnchor, StyledLink } from "./styled-refs"
 export * from "./extra-details"
 
 // custom blog elements

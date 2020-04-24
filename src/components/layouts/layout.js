@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 
 export const Content = styled.div`
-  padding-top: 90px;
+  padding-top: 52px;
   flex: 1 0 auto;
   display: grid;
   grid-template-columns:
@@ -20,7 +20,6 @@ export const Content = styled.div`
     )
     [para-end] 75px [main-end] minmax(1em, 1fr) [full-end];
   grid-auto-rows: minmax(min-content, max-content);
-  margin-bottom: 45px;
 
   > * {
     grid-column: main;

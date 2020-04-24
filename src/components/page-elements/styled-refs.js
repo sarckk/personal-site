@@ -1,6 +1,7 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
+import { Link } from "gatsby"
 
-export const StyledAnchor = styled.a`
+const sharedStyle = css`
   color: ${({ theme }) => theme.colors.anchorColor};
   text-decoration: none;
   background-position: 0 1.1em;
@@ -15,4 +16,12 @@ export const StyledAnchor = styled.a`
       transparent 50%
     );
   }
+`
+
+export const StyledLink = styled(Link)`
+  ${sharedStyle}
+`
+
+export const StyledAnchor = styled.a`
+  ${sharedStyle}
 `
