@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components"
 import reset from "styled-reset"
+import mediaQueries from "../util/media-queries"
 
 // theme settings from tailwind-full.config in tailwindcss/designing-with-tailwindcss
 export const theme = {
@@ -95,6 +96,7 @@ export const theme = {
     postPreview: "0px 3px 17px -2px rgba(222, 222, 222, 0.8)",
     postPreviewHover: "0px 6px 17px 3px rgba(222, 222, 222, 0.8)",
   },
+  ...mediaQueries,
 }
 
 export const GlobalStyle = createGlobalStyle`
