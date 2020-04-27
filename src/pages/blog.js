@@ -77,14 +77,17 @@ const BlogPreviewPage = ({ data }) => {
 
   return (
     <Layout>
-      {data.allMdx.edges.slice(0, postsToShow).map(({ node }, index) => {
+      {edges.slice(0, postsToShow).map(({ node }, index) => {
         const description = node.frontmatter.description
         const truncatedDesc = truncate(description, DESC_PRUNE_LENGTH)
         let featuredImgFixed =
           node.frontmatter.featuredImage.childImageSharp.fixed
 
         return (
-          <BlogPost key={index} to={node.fields.slug}>
+          <BlogPost
+            key={index}
+            to={`${node.fields.collection}${node.fields.slug}`}
+          >
             <PostDetails>
               <PostTitle>{node.frontmatter.title}</PostTitle>
               <ExtraDetails>
@@ -115,7 +118,10 @@ export const query = graphql`
   query {
     allMdx(
       sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { is_hidden: { ne: true } } }
+      filter: {
+        frontmatter: { is_hidden: { ne: true } }
+        fields: { collection: { eq: "blog" } }
+      }
     ) {
       edges {
         node {
@@ -134,6 +140,7 @@ export const query = graphql`
           timeToRead
           fields {
             slug
+            collection
           }
         }
       }

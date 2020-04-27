@@ -10,11 +10,11 @@ const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  transition: transform 0.4s ease;
+  transition: transform 0.1s ease-out;
   z-index: 3;
   transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(15px);
   font-family: ${({ theme }) => theme.font.alternateSerif};
   ${props =>
     props.scrolledDown &&

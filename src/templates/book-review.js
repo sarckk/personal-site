@@ -1,10 +1,9 @@
 import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layouts/layout"
-import Img from "gatsby-image"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { MDXProvider } from "@mdx-js/react"
-import { ExtraDetails, Headings, HR } from "../components/page-elements"
+import { Headings, HR } from "../components/page-elements"
 import MDX from "mdx-scoped-runtime"
 import styled from "styled-components"
 import {
@@ -25,12 +24,6 @@ const TextDetails = styled.div`
   padding: 0 ${({ theme }) => theme.spacing["3"]};
 `
 
-const PostImage = styled.div`
-  flex: 0 0 50%;
-  max-width: 50%;
-  padding-right: ${({ theme }) => theme.spacing["3"]};
-`
-
 const Title = styled(Headings.H2)`
   margin-top: 0;
   margin-bottom: ${({ theme }) => theme.spacing["2"]};
@@ -43,24 +36,7 @@ const Description = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing["3"]};
 `
 
-const MarginExtraDetails = styled(ExtraDetails)`
-  margin-top: ${({ theme }) => theme.spacing["6"]};
-  margin-bottom: ${({ theme }) => theme.spacing["10"]};
-`
-
-const FeatureImage = styled(Img)`
-  margin-bottom: ${({ theme }) => theme.spacing["12"]};
-`
-
-export const BlogTemplate = ({
-  title,
-  description,
-  date,
-  timeToRead,
-  featuredImage,
-  body,
-  isPreview,
-}) => {
+export const BookReviewTemplate = ({ title, authors, body, isPreview }) => {
   return (
     <ConditionalWrapper
       condition={isPreview}
@@ -70,19 +46,8 @@ export const BlogTemplate = ({
         <PostDetails>
           <TextDetails>
             <Title>{title}</Title>
-            <Description>{description}</Description>
-            <MarginExtraDetails>
-              <div>{date.toUpperCase()}</div>
-              {!isPreview && <div>{timeToRead} MIN READ</div>}
-            </MarginExtraDetails>
+            <Description>{authors}</Description>
           </TextDetails>
-          <PostImage>
-            {isPreview ? (
-              <img src={featuredImage} alt="Featured" />
-            ) : (
-              <FeatureImage fluid={featuredImage} />
-            )}
-          </PostImage>
         </PostDetails>
         <HR />
         {isPreview ? (
@@ -110,17 +75,12 @@ export const BlogTemplate = ({
 
 export default ({ data }) => {
   const post = data.mdx
-  const featuredImageFluid =
-    data.mdx.frontmatter.featuredImage.childImageSharp.fluid
 
   return (
     <Layout>
-      <BlogTemplate
+      <BookReviewTemplate
         title={post.frontmatter.title}
-        description={post.frontmatter.description}
-        date={post.frontmatter.date}
-        timeToRead={post.timeToRead}
-        featuredImage={featuredImageFluid}
+        authors={post.frontmatter.authors}
         body={post.body}
         isPreview={false}
       />
@@ -130,20 +90,11 @@ export default ({ data }) => {
 
 export const query = graphql`
   query($slug: String!) {
-    mdx(fields: { slug: { eq: $slug }, collection: { eq: "blog" } }) {
+    mdx(fields: { slug: { eq: $slug }, collection: { eq: "books" } }) {
       body
-      timeToRead
       frontmatter {
-        date(formatString: "MMM DD, YYYY")
         title
-        description
-        featuredImage {
-          childImageSharp {
-            fluid(maxWidth: 400) {
-              ...GatsbyImageSharpFluid
-            }
-          }
-        }
+        authors
       }
     }
   }

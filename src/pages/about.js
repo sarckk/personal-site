@@ -5,7 +5,6 @@ import {
   Headings,
   P,
   StyledAnchor,
-  StyledLink,
 } from "../components/page-elements"
 
 const AboutContainer = styled.div`

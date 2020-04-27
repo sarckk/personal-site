@@ -13,7 +13,7 @@ export const Headings = {
     font-size: ${({ theme }) => theme.fontSize["5xl"]};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     margin-top: ${({ theme }) => theme.spacing["7"]};
-    margin-bottom: ${({ theme }) => theme.spacing["8"]};
+    margin-bottom: ${({ theme }) => theme.spacing["3"]};
   `,
 
   H2: styled.h2`

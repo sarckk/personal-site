@@ -16,7 +16,7 @@ collections:
     extension: mdx
     format: frontmatter
     create: true
-    fields:
+      - {label: "Template Key", name: templateKey, widget: "hidden", default: "blog-post"}
       - { label: Title, name: title }
       - { label: Description, name: description }
       - {
@@ -29,4 +29,17 @@ collections:
         }
       - { label: Hidden, name: is_hidden, widget: boolean, default: false }
       - { label: Image, name: featuredImage, widget: image }
+      - { label: Body, name: body, widget: markdown }
+  - name: books
+    label: Book Reviews
+    folder: content/books
+    extension: mdx
+    format: frontmatter
+    create: true
+    fields:
+      - {label: "Template Key", name: templateKey, widget: "hidden", default: "book-review"}
+      - { label: "Book Title", name: title }
+      - { label: Authors, name: authors }
+      - { label: ISBN, name: isbn }
+      - { label: Hidden, name: is_hidden, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown }
