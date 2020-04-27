@@ -4,7 +4,7 @@ import { useStaticQuery, graphql } from "gatsby"
 
 const FooterContainer = styled.div`
   text-align: center;
-  margin-bottom: 20px;
+  padding: 30px 0;
   flex-shrink: 0;
   font-family: ${({ theme }) => theme.font.alternateSerif};
   font-size: ${({ theme }) => theme.fontSize.xs};

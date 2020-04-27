@@ -8,23 +8,16 @@ import {
   StyledLink,
 } from "../components/page-elements"
 
-const SerifH1 = styled(Headings.H1)`
-  font-family: ${({ theme }) => theme.font.serif};
-  margin-bottom: ${({ theme }) => theme.spacing["8"]};
-`
-
 const AboutContainer = styled.div`
   // mobile-first
 
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
-  padding: 33px 10px;
 
   @media only screen and (min-width: 500px) {
     & {
       grid-template-columns: 1fr 1fr;
-      padding: 33px 0;
     }
   }
 `
@@ -66,7 +59,7 @@ export default () => {
       <AboutContainer>
         <TreeArea>Placeholder</TreeArea>
         <AboutTextFirstPart>
-          <SerifH1>Hey, I'm Shin</SerifH1>
+          <Headings.SerifH1>Hey, I'm Shin</Headings.SerifH1>
           <P>
             I'm a Computer Science undergraduate at{" "}
             <StyledAnchor

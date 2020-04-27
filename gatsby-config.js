@@ -5,6 +5,27 @@ module.exports = {
     author: `Yong Hoon Shin`,
   },
   plugins: [
+    `gatsby-plugin-styled-components`,
+    {
+      resolve: "gatsby-plugin-web-font-loader",
+      options: {
+        typekit: {
+          id: "uoj3gty",
+        },
+        custom: {
+          families: ["Charter"],
+          urls: ["/fonts/fonts.css"],
+        },
+      },
+    },
+    {
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /images/,
+        },
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
@@ -51,27 +72,6 @@ module.exports = {
       resolve: `gatsby-plugin-netlify-cms`,
       options: {
         modulePath: `${__dirname}/src/cms/cms.js`,
-      },
-    },
-    `gatsby-plugin-styled-components`,
-    {
-      resolve: "gatsby-plugin-web-font-loader",
-      options: {
-        custom: {
-          families: ["Charter"],
-          urls: ["/fonts/fonts.css"],
-        },
-        typekit: {
-          id: "uoj3gty",
-        },
-      },
-    },
-    {
-      resolve: "gatsby-plugin-react-svg",
-      options: {
-        rule: {
-          include: /images/,
-        },
       },
     },
     {

@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 
 export const Content = styled.div`
-  padding-top: 52px;
+  padding-top: 75px;
   flex: 1 0 auto;
   display: grid;
   grid-template-columns:

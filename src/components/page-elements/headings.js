@@ -8,6 +8,14 @@ export const Headings = {
     margin-bottom: ${({ theme }) => theme.spacing["3"]};
   `,
 
+  SerifH1: styled.h1`
+    font-family: ${({ theme }) => theme.font.serif};
+    font-size: ${({ theme }) => theme.fontSize["5xl"]};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+    margin-top: ${({ theme }) => theme.spacing["7"]};
+    margin-bottom: ${({ theme }) => theme.spacing["8"]};
+  `,
+
   H2: styled.h2`
     font-size: ${({ theme }) => theme.fontSize["3xl"]};
     font-weight: ${({ theme }) => theme.fontWeight.semibold};
