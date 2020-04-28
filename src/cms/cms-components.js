@@ -19,7 +19,7 @@ import {
 } from "../components/page-elements"
 import styled from "styled-components"
 
-const BlogContent = styled.div`
+export const ParaContentWrapper = styled.div`
   line-height: ${({ theme }) => theme.lineHeight.relaxed};
   grid-column: full;
   display: inherit;
@@ -43,7 +43,7 @@ export const CMS_SHORTCODES = {
 }
 
 export const CMS_WRAPPER = {
-  wrapper: BlogContent,
+  wrapper: ParaContentWrapper,
 }
 
 export const CMS_COMPONENTS = {

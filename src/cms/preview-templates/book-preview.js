@@ -9,6 +9,7 @@ export const BookPreviewTemplate = ({ entry, widgetFor, getAsset }) => {
       title={entry.getIn(["data", "title"])}
       authors={entry.getIn(["data", "authors"])}
       body={body}
+      summary={entry.getIn(["data", "summary"])}
       isPreview={true}
     />
   )

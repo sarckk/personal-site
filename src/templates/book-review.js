@@ -6,55 +6,123 @@ import { MDXProvider } from "@mdx-js/react"
 import { Headings, HR } from "../components/page-elements"
 import MDX from "mdx-scoped-runtime"
 import styled from "styled-components"
-import {
-  CMS_WRAPPER,
-  CMS_SHORTCODES,
-  CMS_COMPONENTS,
-} from "../cms/cms-components"
+import { CMS_SHORTCODES, CMS_COMPONENTS } from "../cms/cms-components"
 import { ConditionalWrapper } from "../components/utils/conditional-wrapper"
 import { Content } from "../components/layouts/layout"
+import Img from "gatsby-image"
+import { ParaContentWrapper } from "../cms/cms-components"
 
-const PostDetails = styled.div`
+const BookDetails = styled.div`
   display: flex;
+  margin-bottom: ${({ theme }) => theme.spacing["4"]};
 `
 
 const TextDetails = styled.div`
-  flex: 0 0 50%;
-  max-width: 50%;
-  padding: 0 ${({ theme }) => theme.spacing["3"]};
+  flex: 1 1 auto;
+  padding: 0 ${({ theme }) => theme.spacing["6"]};
+  display: flex;
+  flex-direction: column;
 `
 
-const Title = styled(Headings.H2)`
-  margin-top: 0;
-  margin-bottom: ${({ theme }) => theme.spacing["2"]};
+const Title = styled(Headings.H1)`
+  font-family: ${({ theme }) => theme.font.serif};
+  line-height: normal;
+  margin: 0;
 `
 
-const Description = styled.div`
-  font-family: ${({ theme }) => theme.font.sans};
+const Authors = styled.div`
+  color: ${({ theme }) => theme.colors.gray[900]};
   font-size: ${({ theme }) => theme.fontSize.lg};
-  color: ${({ theme }) => theme.colors.gray[700]};
   margin-bottom: ${({ theme }) => theme.spacing["3"]};
 `
 
-export const BookReviewTemplate = ({ title, authors, body, isPreview }) => {
+const BookCover = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.gray[300]};
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+`
+
+const Summary = styled.div`
+  font-family: ${({ theme }) => theme.font.sans};
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
+`
+
+const BookExternalLink = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-top: auto;
+`
+
+const RefLink = styled.a`
+  cursor: pointer;
+  text-decoration: none;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-family: ${({ theme }) => theme.font.sans};
+  color: ${({ theme }) => theme.colors.gray[800]};
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.colors.gray[300]};
+  background-color: ${props =>
+    props.variant === "goodreads" ? "#f8f4ec" : "#FECE85"};
+
+  :first-child {
+    margin-right: ${({ theme }) => theme.spacing["2"]};
+  }
+
+  :hover {
+    background-color: ${props =>
+      props.variant === "goodreads" ? "#EEEBE3" : "#FFC66F"};
+  }
+`
+
+export const BookReviewTemplate = ({
+  title,
+  authors,
+  body,
+  coverImg,
+  summary,
+  isPreview,
+}) => {
   return (
     <ConditionalWrapper
       condition={isPreview}
       wrapper={children => <Content>{children}</Content>}
     >
-      <>
-        <PostDetails>
+      <ParaContentWrapper>
+        <BookDetails>
+          {!isPreview && (
+            <BookCover>
+              <Img fixed={coverImg} />
+            </BookCover>
+          )}
           <TextDetails>
             <Title>{title}</Title>
-            <Description>{authors}</Description>
+            <Authors>{authors}</Authors>
+            <Summary>{summary}</Summary>
+            <BookExternalLink>
+              <RefLink
+                rel="noopener noreferrer"
+                target="_blank"
+                href={`https://www.goodreads.com/search?q=${title}`}
+                variant="goodreads"
+              >
+                Goodreads
+              </RefLink>
+              <RefLink
+                rel="noopener noreferrer"
+                target="_blank"
+                href={`https://www.amazon.com/s?k=${title}`}
+                variant="amazon"
+              >
+                Amazon
+              </RefLink>
+            </BookExternalLink>
           </TextDetails>
-        </PostDetails>
+        </BookDetails>
         <HR />
         {isPreview ? (
-          <MDX
-            components={{ ...CMS_COMPONENTS, ...CMS_WRAPPER }}
-            scope={CMS_SHORTCODES}
-          >
+          <MDX components={{ ...CMS_COMPONENTS }} scope={CMS_SHORTCODES}>
             {body}
           </MDX>
         ) : (
@@ -62,13 +130,12 @@ export const BookReviewTemplate = ({ title, authors, body, isPreview }) => {
             components={{
               ...CMS_SHORTCODES,
               ...CMS_COMPONENTS,
-              ...CMS_WRAPPER,
             }}
           >
             <MDXRenderer>{body}</MDXRenderer>
           </MDXProvider>
         )}
-      </>
+      </ParaContentWrapper>
     </ConditionalWrapper>
   )
 }
@@ -82,6 +149,8 @@ export default ({ data }) => {
         title={post.frontmatter.title}
         authors={post.frontmatter.authors}
         body={post.body}
+        coverImg={post.coverImg.childImageSharp.fixed}
+        summary={post.frontmatter.summary}
         isPreview={false}
       />
     </Layout>
@@ -92,9 +161,17 @@ export const query = graphql`
   query($slug: String!) {
     mdx(fields: { slug: { eq: $slug }, collection: { eq: "books" } }) {
       body
+      coverImg {
+        childImageSharp {
+          fixed(width: 150) {
+            ...GatsbyImageSharpFixed
+          }
+        }
+      }
       frontmatter {
         title
         authors
+        summary
       }
     }
   }
