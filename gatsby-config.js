@@ -1,3 +1,5 @@
+const algoliaConfig = require("./gatsby-plugin-algolia-config.js")
+
 module.exports = {
   siteMetadata: {
     title: `yonghoonshin`,
@@ -82,8 +84,12 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-algolia`,
-      options: require("./gatsby-plugin-algolia-config.js"),
+      resolve: `gatsby-plugin-algolia`, // first time for "blog" index
+      options: algoliaConfig.blogConfig,
+    },
+    {
+      resolve: `gatsby-plugin-algolia`, // second time for "books" index
+      options: algoliaConfig.booksConfig,
     },
   ],
 }

@@ -84,10 +84,7 @@ const BlogPreviewPage = ({ data }) => {
           node.frontmatter.featuredImage.childImageSharp.fixed
 
         return (
-          <BlogPost
-            key={index}
-            to={`${node.fields.collection}${node.fields.slug}`}
-          >
+          <BlogPost key={index} to={node.fields.pathName}>
             <PostDetails>
               <PostTitle>{node.frontmatter.title}</PostTitle>
               <ExtraDetails>
@@ -139,8 +136,7 @@ export const query = graphql`
           }
           timeToRead
           fields {
-            slug
-            collection
+            pathName
           }
         }
       }

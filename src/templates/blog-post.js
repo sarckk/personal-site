@@ -126,8 +126,8 @@ export default ({ data }) => {
 }
 
 export const query = graphql`
-  query($slug: String!) {
-    mdx(fields: { slug: { eq: $slug }, collection: { eq: "blog" } }) {
+  query($pathName: String!) {
+    mdx(fields: { pathName: { eq: $pathName } }) {
       body
       timeToRead
       frontmatter {

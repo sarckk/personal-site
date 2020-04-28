@@ -9,9 +9,15 @@ const fetch = require("node-fetch")
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
   createTypes(`
     type Mdx implements Node{
+      frontmatter: Frontmatter
       coverImg: File @link(from: "coverImg___NODE")
     }
-    `)
+
+    type Frontmatter{
+      isbn: String
+    }
+  `)
+  console.log("Successful!")
 }
 
 exports.onCreateNode = async ({
@@ -27,22 +33,22 @@ exports.onCreateNode = async ({
 
   if (node.internal.type === `Mdx`) {
     const parentNode = getNode(node.parent)
+    const collection =
+      parentNode.name === "dummy" ? "dummy" : parentNode.sourceInstanceName
 
     createNodeField({
       node,
-      name: "collection",
-      value:
-        parentNode.name === "dummy"
-          ? "dummy"
-          : parentNode.sourceInstanceName,
+      name: `collection`,
+      value: collection,
     })
 
     const slug = createFilePath({ node, getNode, basePath: "content" })
+    const pathName = `${collection}${slug}`
 
     createNodeField({
       node,
-      name: `slug`,
-      value: slug,
+      name: `pathName`,
+      value: pathName,
     })
 
     if (parentNode.sourceInstanceName === "books") {
@@ -74,8 +80,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         edges {
           node {
             fields {
-              collection
-              slug
+              pathName
             }
             frontmatter {
               templateKey
@@ -93,12 +98,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   result.data.allMdx.edges.forEach(({ node }) => {
     createPage({
-      path: `${node.fields.collection}${node.fields.slug}`,
+      path: node.fields.pathName,
       component: path.resolve(
         `./src/templates/${String(node.frontmatter.templateKey)}.js`
       ),
       context: {
-        slug: node.fields.slug,
+        pathName: node.fields.pathName,
       },
     })
   })

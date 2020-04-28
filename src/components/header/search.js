@@ -6,6 +6,7 @@ import {
   connectHits,
   connectSearchBox,
   Highlight,
+  Index,
 } from "react-instantsearch-dom"
 import styled from "styled-components"
 import { UnstyledLink, ExtraDetails } from "../page-elements"
@@ -89,20 +90,34 @@ const HitBox = styled.div`
 
 const Hit = styled.div`
   background-color: white;
-  padding: ${({ theme }) => theme.spacing["6"]};
-  height: 200px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
+const BlogHit = styled(Hit)`
+  padding: ${({ theme }) => theme.spacing["2"]}
+    ${({ theme }) => theme.spacing["4"]};
+  height: 100px;
+`
+
+const BookHit = styled(Hit)`
+  padding: ${({ theme }) => theme.spacing["2"]}
+    ${({ theme }) => theme.spacing["4"]};
+  height: 50px;
 `
 
 const HitTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-size: ${({ theme }) => theme.fontSize.sm};
   font-family: ${({ theme }) => theme.font.sans};
   line-height: ${({ theme }) => theme.lineHeight.tight};
-  margin-top: ${({ theme }) => theme.spacing["2"]};
+  width: 80%;
 `
 
 const HitDesc = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.gray[700]};
   margin-top: ${({ theme }) => theme.spacing["1"]};
   font-family: ${({ theme }) => theme.font.sans};
   display: -webkit-box;
@@ -110,15 +125,20 @@ const HitDesc = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
 `
+
+const BookHitDesc = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-family: ${({ theme }) => theme.font.sans};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`
+
 const HitDate = styled(ExtraDetails)`
   position: absolute;
   top: 0;
   right: 14px;
-`
-
-const HitExcerpt = styled.p`
-  margin-top: ${({ theme }) => theme.spacing["4"]};
-  font-size: ${({ theme }) => theme.fontSize.sm};
 `
 
 const HitSeparator = styled.div`
@@ -128,14 +148,27 @@ const HitSeparator = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[300]};
 `
 
-const Hits = connectHits(({ hits, visible }) => (
+const SearchIndexInfo = styled.div`
+  padding: ${({ theme }) => theme.spacing["1"]}
+    ${({ theme }) => theme.spacing["4"]};
+  background-color: ${({ theme }) => theme.colors.gray[100]};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-family: ${({ theme }) => theme.font.sans};
+  color: ${({ theme }) => theme.colors.gray[700]};
+  border-style: solid;
+  border-color: ${({ theme }) => theme.colors.gray[300]};
+  border-width: 1px 0 1px 0;
+`
+
+const BlogHits = connectHits(({ hits }) => (
   <>
     {hits.length ? (
-      <HitBox visible={visible}>
+      <>
+        <SearchIndexInfo>Blog posts</SearchIndexInfo>
         {hits.map((hit, i, hits) => {
           return (
             <React.Fragment key={i}>
-              <Hit>
+              <BlogHit>
                 <UnstyledLink to={hit.path}>
                   <HitTitle>
                     <Highlight attribute="title" hit={hit} tagName="strong" />
@@ -149,15 +182,39 @@ const Hits = connectHits(({ hits, visible }) => (
                   </HitDesc>
                   <HitDate>{hit.date.toUpperCase()}</HitDate>
                 </UnstyledLink>
-                <HitExcerpt>
-                  <Highlight attribute="excerpt" hit={hit} tagName="strong" />
-                </HitExcerpt>
-              </Hit>
+              </BlogHit>
               {hits.length - 1 !== i && <HitSeparator />}
             </React.Fragment>
           )
         })}
-      </HitBox>
+      </>
+    ) : null}
+  </>
+))
+
+const BookHits = connectHits(({ hits }) => (
+  <>
+    {hits.length ? (
+      <>
+        <SearchIndexInfo>Book reviews</SearchIndexInfo>
+        {hits.map((hit, i, hits) => {
+          return (
+            <React.Fragment key={i}>
+              <BookHit>
+                <UnstyledLink to={hit.path}>
+                  <BookHitDesc>
+                    <Highlight attribute="title" hit={hit} tagName="strong" />
+                    {" ("}
+                    <Highlight attribute="authors" hit={hit} tagName="strong" />
+                    {" )"}
+                  </BookHitDesc>
+                </UnstyledLink>
+              </BookHit>
+              {hits.length - 1 !== i && <HitSeparator />}
+            </React.Fragment>
+          )
+        })}
+      </>
     ) : null}
   </>
 ))
@@ -202,12 +259,18 @@ export const Search = React.memo(({ visible }) => {
 
   return (
     <SearchArea>
-      <InstantSearch
-        indexName={process.env.ALGOLIA_INDEX_NAME}
-        searchClient={proxiedSearchClient}
-      >
+      <InstantSearch indexName={"blog"} searchClient={proxiedSearchClient}>
         <RefForwardedSearchBox ref={searchInputRef} clearText={clearText} />
-        <Hits visible={visible} />
+
+        <HitBox visible={visible}>
+          <Index indexName="blog">
+            <BlogHits />
+          </Index>
+
+          <Index indexName="books">
+            <BookHits />
+          </Index>
+        </HitBox>
       </InstantSearch>
     </SearchArea>
   )

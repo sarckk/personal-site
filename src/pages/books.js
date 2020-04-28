@@ -91,7 +91,6 @@ export default ({ data }) => {
           {edges.map(({ node }, index) => {
             const title = node.frontmatter.title
             const authors = node.frontmatter.authors
-            const path = `${node.fields.collection}${node.fields.slug}`
 
             return (
               <Book
@@ -99,7 +98,7 @@ export default ({ data }) => {
                 title={title}
                 authors={authors}
                 coverImg={node.coverImg.childImageSharp.fixed}
-                path={path}
+                path={node.fields.pathName}
               />
             )
           })}
@@ -131,8 +130,7 @@ export const query = graphql`
             authors
           }
           fields {
-            slug
-            collection
+            pathName
           }
         }
       }
