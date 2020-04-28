@@ -4,6 +4,7 @@ import Layout from "../components/layouts/layout"
 import { Headings, P, StyledAnchor } from "../components/page-elements"
 import { Link, graphql } from "gatsby"
 import Tilt from "react-tilt"
+import Img from "gatsby-image"
 
 const BookGrid = styled.div`
   display: grid;
@@ -50,11 +51,11 @@ const BookTilt = styled(Tilt)`
   margin-bottom: ${({ theme }) => theme.spacing["2"]};
 `
 
-const Book = ({ title, authors, cover, path }) => (
+const Book = ({ title, authors, coverImg, path }) => (
   <BookDiv>
     <Link to={path}>
       <BookTilt options={{ scale: 1.05 }}>
-        <img src={cover} />
+        <Img fixed={coverImg} alt={title} />
       </BookTilt>
     </Link>
     <BookTitle>{title}</BookTitle>
@@ -72,7 +73,15 @@ export default ({ data }) => {
         <P>
           Here are some of the books that I've read recently and my thoughts on
           them. <br />I also keep a list of books I look forward to reading,
-          which you can find <StyledAnchor>here</StyledAnchor>.
+          which you can find{" "}
+          <StyledAnchor
+            href={`booklist.pdf`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            here
+          </StyledAnchor>
+          .
         </P>
       </PageDesc>
       {edges.length === 0 ? (
@@ -82,7 +91,6 @@ export default ({ data }) => {
           {edges.map(({ node }, index) => {
             const title = node.frontmatter.title
             const authors = node.frontmatter.authors
-            const coverImageUrl = node.fields.coverImage
             const path = `${node.fields.collection}${node.fields.slug}`
 
             return (
@@ -90,7 +98,7 @@ export default ({ data }) => {
                 key={index}
                 title={title}
                 authors={authors}
-                cover={coverImageUrl}
+                coverImg={node.coverImg.childImageSharp.fixed}
                 path={path}
               />
             )
@@ -111,6 +119,13 @@ export const query = graphql`
     ) {
       edges {
         node {
+          coverImg {
+            childImageSharp {
+              fixed(width: 160) {
+                ...GatsbyImageSharpFixed
+              }
+            }
+          }
           frontmatter {
             title
             authors
@@ -118,7 +133,6 @@ export const query = graphql`
           fields {
             slug
             collection
-            coverImage
           }
         }
       }

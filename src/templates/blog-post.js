@@ -17,6 +17,7 @@ import { Content } from "../components/layouts/layout"
 
 const PostDetails = styled.div`
   display: flex;
+  margin-bottom: ${({ theme }) => theme.spacing["12"]};
 `
 
 const TextDetails = styled.div`
@@ -48,10 +49,6 @@ const MarginExtraDetails = styled(ExtraDetails)`
   margin-bottom: ${({ theme }) => theme.spacing["10"]};
 `
 
-const FeatureImage = styled(Img)`
-  margin-bottom: ${({ theme }) => theme.spacing["12"]};
-`
-
 export const BlogTemplate = ({
   title,
   description,
@@ -80,7 +77,7 @@ export const BlogTemplate = ({
             {isPreview ? (
               <img src={featuredImage} alt="Featured" />
             ) : (
-              <FeatureImage fluid={featuredImage} />
+              <Img fluid={featuredImage} />
             )}
           </PostImage>
         </PostDetails>

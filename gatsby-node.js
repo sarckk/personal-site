@@ -1,10 +1,28 @@
-const { createFilePath } = require("gatsby-source-filesystem")
+const {
+  createFilePath,
+  createRemoteFileNode,
+} = require("gatsby-source-filesystem")
 const path = require("path")
 const { fmImagesToRelative } = require("gatsby-remark-relative-images")
 const fetch = require("node-fetch")
 
-exports.onCreateNode = async ({ node, getNode, actions }) => {
-  const { createNodeField } = actions
+exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
+  createTypes(`
+    type Mdx implements Node{
+      coverImg: File @link(from: "coverImg___NODE")
+    }
+    `)
+}
+
+exports.onCreateNode = async ({
+  node,
+  getNode,
+  actions,
+  store,
+  cache,
+  createNodeId,
+}) => {
+  const { createNodeField, createNode } = actions
   fmImagesToRelative(node)
 
   if (node.internal.type === `Mdx`) {
@@ -14,7 +32,7 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
       node,
       name: "collection",
       value:
-        parentNode.name === "dummy-content"
+        parentNode.name === "dummy"
           ? "dummy"
           : parentNode.sourceInstanceName,
     })
@@ -29,13 +47,20 @@ exports.onCreateNode = async ({ node, getNode, actions }) => {
 
     if (parentNode.sourceInstanceName === "books") {
       const isbn = node.frontmatter.isbn
-      const url = `http://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`
+      const url = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
 
-      createNodeField({
-        node,
-        name: `coverImage`,
-        value: url
+      let fileNode = await createRemoteFileNode({
+        url,
+        parentNode: node.id,
+        createNode,
+        createNodeId,
+        cache,
+        store,
       })
+
+      if (fileNode) {
+        node.coverImg___NODE = fileNode.id
+      }
     }
   }
 }
