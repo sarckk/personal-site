@@ -1,5 +1,9 @@
 const algoliaConfig = require("./gatsby-plugin-algolia-config.js")
 
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   siteMetadata: {
     title: `yonghoonshin`,
@@ -24,7 +28,7 @@ module.exports = {
       resolve: "gatsby-plugin-react-svg",
       options: {
         rule: {
-          include: /images/,
+          include: /\.inline\.svg$/,
         },
       },
     },
@@ -49,6 +53,17 @@ module.exports = {
       options: {
         name: `books`,
         path: `${__dirname}/content/books`,
+      },
+    },
+    {
+      resolve: `gatsby-source-graphql`,
+      options: {
+        typeName: `Github`,
+        fieldName: `github`,
+        url: `https://api.github.com/graphql`,
+        headers: {
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        },
       },
     },
     {

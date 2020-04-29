@@ -4,7 +4,6 @@ const {
 } = require("gatsby-source-filesystem")
 const path = require("path")
 const { fmImagesToRelative } = require("gatsby-remark-relative-images")
-const fetch = require("node-fetch")
 
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
   createTypes(`
