@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { UnstyledLink } from "../page-elements"
 import styled, { css } from "styled-components"
-import SearchIcon from "../../images/search.svg"
+import SearchIcon from "../../images/search.inline.svg"
 import { throttle } from "lodash"
 import { Search } from "./search"
 import { ScrambleTitle } from "./scramble-title"
@@ -13,13 +13,18 @@ const HeaderContainer = styled.div`
   transition: transform 0.1s ease-out;
   z-index: 3;
   transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: ${props =>
+    props.isOnBlog &&
+    css`
+      ${({ theme }) => theme.colors.transparent}
+    `};
   backdrop-filter: blur(15px);
   font-family: ${({ theme }) => theme.font.alternateSerif};
   ${props =>
     props.scrolledDown &&
     css`
       border-bottom: 1px solid ${({ theme }) => theme.colors.gray[300]};
+      background-color: rgba(255, 255, 255, 0.7);
     `}
 `
 
@@ -30,11 +35,17 @@ const HeaderContent = styled.div`
   padding: 6px 5px 9px;
   max-width: 850px;
   margin: 0 auto;
-  ${props =>
-    !props.scrolledDown &&
-    css`
-      border-bottom: 1px solid ${({ theme }) => theme.colors.gray[300]};
-    `}
+  border-bottom: 1px solid ${props => {
+    if (!props.scrolledDown) {
+      return props.isOnBlog
+        ? css`
+            ${({ theme }) => theme.colors.gray[500]};
+          `
+        : css`
+            ${({ theme }) => theme.colors.gray[300]};
+          `
+    }
+  }}
   position: relative;
 `
 
@@ -44,6 +55,31 @@ const HeaderNav = styled.ul`
   align-items: center;
   height: 27px;
   z-index: 2;
+
+  > li {
+    transform: ${props => (props.visible ? "scale(0)" : "scale(1)")};
+
+    &:nth-child(1) {
+      transition-delay: ${props => (props.visible ? "310ms" : "150ms")};
+    }
+
+    &:nth-child(2) {
+      transition-delay: ${props => (props.visible ? "270ms" : "190ms")};
+    }
+
+    &:nth-child(3) {
+      transition-delay: ${props => (props.visible ? "230ms" : "230ms")};
+    }
+
+    &:nth-child(4) {
+      transition-delay: ${props => (props.visible ? "190ms" : "270ms")};
+    }
+
+    &:nth-child(5) {
+      transition-delay: ${props => (props.visible ? "150ms" : "310ms")};
+      margin-right: 0;
+    }
+  }
 `
 
 const HeaderLI = styled.li`
@@ -52,28 +88,6 @@ const HeaderLI = styled.li`
   display: inline-block;
   transition: all 0.4s ease;
   height: 100%;
-  transform: ${props => (props.visible ? "scale(0)" : "scale(1)")};
-
-  &:nth-child(1) {
-    transition-delay: ${props => (props.visible ? "310ms" : "150ms")};
-  }
-
-  &:nth-child(2) {
-    transition-delay: ${props => (props.visible ? "270ms" : "190ms")};
-  }
-
-  &:nth-child(3) {
-    transition-delay: ${props => (props.visible ? "230ms" : "230ms")};
-  }
-
-  &:nth-child(4) {
-    transition-delay: ${props => (props.visible ? "190ms" : "270ms")};
-  }
-
-  &:nth-child(5) {
-    transition-delay: ${props => (props.visible ? "150ms" : "310ms")};
-    margin-right: 0;
-  }
 `
 
 const ListItem = props => (
@@ -98,7 +112,7 @@ const SearchButton = styled.button`
   }
 
   &:hover .cls-1 {
-    stroke: ${({ theme }) => theme.colors.gray[600]};
+    stroke: ${({ theme }) => theme.colors.gray[700]};
     transition: all 0.3s ease;
   }
 `
@@ -124,14 +138,14 @@ const SearchPanel = styled.div`
 
 const SearchIcon17pxGray = styled(SearchIcon17px)`
   .cls-1 {
-    stroke: ${({ theme }) => theme.colors.gray[600]};
+    stroke: ${({ theme }) => theme.colors.gray[700]};
   }
 `
 
 const SearchCloseBar = styled.div`
   height: 16px;
   width: 1px;
-  background-color: ${({ theme }) => theme.colors.gray[600]};
+  background-color: ${({ theme }) => theme.colors.gray[700]};
   position: absolute;
   top: calc(50% - 8px);
   left: 50%;
@@ -161,15 +175,16 @@ const SearchClose = styled.button`
 
   &:hover {
     div {
-      background-color: ${({ theme }) => theme.colors.gray[500]};
+      background-color: ${({ theme }) => theme.colors.gray[600]};
     }
   }
 `
 
-export default () => {
+export default props => {
   const [searchVisible, setSearchVisible] = useState(false)
   const [scrolledDown, setScrolledDown] = useState(false)
   const [hideHeader, setHideHeader] = useState(false)
+  const isOnBlog = props.location ? true : false
 
   const toggleSearch = () => {
     setSearchVisible(searchVisible => !searchVisible)
@@ -198,24 +213,20 @@ export default () => {
   }, [])
 
   return (
-    <HeaderContainer hide={hideHeader} scrolledDown={scrolledDown}>
-      <HeaderContent scrolledDown={scrolledDown}>
+    <HeaderContainer
+      isOnBlog={isOnBlog}
+      hide={hideHeader}
+      scrolledDown={scrolledDown}
+    >
+      <HeaderContent isOnBlog={isOnBlog} scrolledDown={scrolledDown}>
         <ScrambleTitle />
 
-        <HeaderNav>
-          <ListItem to="/about" visible={searchVisible}>
-            about
-          </ListItem>
-          <ListItem to="/work" visible={searchVisible}>
-            work
-          </ListItem>
-          <ListItem to="/blog" visible={searchVisible}>
-            blog
-          </ListItem>
-          <ListItem to="/books" visible={searchVisible}>
-            books
-          </ListItem>
-          <HeaderLI visible={searchVisible}>
+        <HeaderNav visible={searchVisible}>
+          <ListItem to="/about">about</ListItem>
+          <ListItem to="/work">work</ListItem>
+          <ListItem to="/blog">blog</ListItem>
+          <ListItem to="/books">books</ListItem>
+          <HeaderLI>
             <SearchButton onClick={toggleSearch}>
               <SearchIcon17px />
             </SearchButton>

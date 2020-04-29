@@ -5,6 +5,7 @@ import {
   InstantSearch,
   connectHits,
   connectSearchBox,
+  connectStateResults,
   Highlight,
   Index,
 } from "react-instantsearch-dom"
@@ -66,11 +67,11 @@ const HitBox = styled.div`
   position: absolute;
   top: 39px;
   background-color: ${({ theme }) => theme.colors.white};
+  display: ${props => (props.visible ? "block" : "none")};
   border-color: ${({ theme }) => theme.colors.gray[300]};
   border-style: solid;
   border-width: 0 1px 1px 1px;
   box-shadow: 0px 25px 69px -36px rgba(133, 133, 133, 0.66);
-  display: ${props => (props.visible ? "block" : "none")};
   overflow: overlay;
   max-height: 603px;
   width: 100%;
@@ -244,6 +245,28 @@ const RefForwardedSearchBox = React.forwardRef((props, ref) => (
   <SearchBox {...props} forwardRef={ref} />
 ))
 
+const StateResults = connectStateResults(({ searchResults, visible }) => {
+  const hasResults = searchResults && searchResults.nbHits !== 0
+
+  if (!hasResults || !visible) {
+    return <> </>
+  }
+
+  return (
+    <>
+      <HitBox visible={visible}>
+        <Index indexName="blog">
+          <BlogHits />
+        </Index>
+
+        <Index indexName="books">
+          <BookHits />
+        </Index>
+      </HitBox>
+    </>
+  )
+})
+
 export const Search = React.memo(({ visible }) => {
   const searchInputRef = useRef(null)
   const [clearText, setClearText] = useState(true)
@@ -262,15 +285,7 @@ export const Search = React.memo(({ visible }) => {
       <InstantSearch indexName={"blog"} searchClient={proxiedSearchClient}>
         <RefForwardedSearchBox ref={searchInputRef} clearText={clearText} />
 
-        <HitBox visible={visible}>
-          <Index indexName="blog">
-            <BlogHits />
-          </Index>
-
-          <Index indexName="books">
-            <BookHits />
-          </Index>
-        </HitBox>
+        <StateResults visible={visible} />
       </InstantSearch>
     </SearchArea>
   )

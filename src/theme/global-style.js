@@ -12,7 +12,7 @@ export const theme = {
   fontSize: {
     xxs: "0.6rem",
     xs: "0.75rem",
-    sm: "0.95rem",
+    sm: "0.875rem",
     base: "1rem",
     lg: "1.125rem",
     xl: "1.25rem",
@@ -35,7 +35,7 @@ export const theme = {
   colors: {
     transparent: "transparent",
 
-    black: "#191919",
+    black: "#3F3F3F",
     white: "#fff",
 
     gray: {
@@ -93,8 +93,8 @@ export const theme = {
     "64": "16rem",
   },
   boxShadow: {
-    postPreview: "0px 3px 17px -2px rgba(222, 222, 222, 0.8)",
-    postPreviewHover: "0px 6px 17px 3px rgba(222, 222, 222, 0.8)",
+    postPreviewHover: "0px 33px 62px -26px rgba(59,64,66,0.34)",
+    postPreview: "0px 4px 23px -7px rgba(59,64,66,0.25);",
   },
   ...mediaQueries,
 }

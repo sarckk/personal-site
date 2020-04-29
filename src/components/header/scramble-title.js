@@ -1,16 +1,23 @@
 import React, { useEffect, useRef } from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 const SiteTitle = styled(Link)`
   font-size: ${({ theme }) => theme.fontSize["2xl"]};
   margin-right: auto;
   z-index: 2;
   text-decoration: none;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${props =>
+    props.isOnBlog
+      ? css`
+          ${({ theme }) => theme.colors.gray[300]};
+        `
+      : css`
+          ${({ theme }) => theme.colors.black};
+        `};
 `
 
-export const ScrambleTitle = () => {
+export const ScrambleTitle = ({ isOnBlog }) => {
   const siteTitle = useRef(null)
 
   const data = useStaticQuery(
@@ -118,7 +125,7 @@ export const ScrambleTitle = () => {
   }, [])
 
   return (
-    <SiteTitle ref={siteTitle} to="/">
+    <SiteTitle isOnBlog={isOnBlog} ref={siteTitle} to="/">
       {data.site.siteMetadata.title}
     </SiteTitle>
   )

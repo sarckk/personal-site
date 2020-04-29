@@ -9,6 +9,7 @@ import { truncate } from "../util/truncate"
 
 const BlogPost = styled(Link)`
   display: flex;
+  background-color: ${({ theme }) => theme.colors.white};
   align-items: stretch;
   cursor: pointer;
   text-decoration: none;
@@ -51,9 +52,16 @@ const PostThumbnail = styled.div`
   justify-content: center;
 `
 
+const WaveBG = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -2;
+`
+
 const DESC_PRUNE_LENGTH = 100
 
-const BlogPreviewPage = ({ data }) => {
+const BlogPreviewPage = ({ location, data }) => {
   const edges = data.allMdx ? data.allMdx.edges : []
 
   const [postsToShow, setPostsToShow] = useState(5)
@@ -76,7 +84,7 @@ const BlogPreviewPage = ({ data }) => {
   }
 
   return (
-    <Layout>
+    <Layout location={location}>
       {edges.slice(0, postsToShow).map(({ node }, index) => {
         const description = node.frontmatter.description
         const truncatedDesc = truncate(description, DESC_PRUNE_LENGTH)
@@ -105,6 +113,33 @@ const BlogPreviewPage = ({ data }) => {
         )
       })}
       {!allPostsShown && <Loader onVisible={loadMorePosts} />}
+      <WaveBG>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <defs>
+            <linearGradient
+              id="grad1"
+              gradientTransform="rotate(90)"
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop
+                offset="0%"
+                style={{ stopColor: "#eef2f3", stopOpacity: 1 }}
+              />
+              <stop
+                offset="100%"
+                style={{ stopColor: "#8e9eab", stopOpacity: 1 }}
+              />
+            </linearGradient>
+          </defs>
+          <path
+            fill="url(#grad1)"
+            d="M0,128L48,149.3C96,171,192,213,288,213.3C384,213,480,171,576,176C672,181,768,235,864,229.3C960,224,1056,160,1152,138.7C1248,117,1344,139,1392,149.3L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+          ></path>
+        </svg>
+      </WaveBG>
     </Layout>
   )
 }

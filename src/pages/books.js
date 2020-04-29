@@ -41,7 +41,7 @@ const PageDesc = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: middle;
+  justify-content: center;
 `
 
 const BookTilt = styled(Tilt)`

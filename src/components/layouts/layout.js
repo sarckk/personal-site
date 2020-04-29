@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import Header from "../header/header"
+import Header from "../header"
 import Footer from "../footer"
 
 const Container = styled.div`
@@ -11,14 +11,14 @@ const Container = styled.div`
 
 export const Content = styled.div`
   padding-top: 75px;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   display: grid;
   grid-template-columns:
-    [full-start] minmax(1em, 1fr) [main-start] 75px [para-start] minmax(
+    [full-start] minmax(1em, 1fr) [main-start] 60px [para-start] minmax(
       0,
       650px
     )
-    [para-end] 75px [main-end] minmax(1em, 1fr) [full-end];
+    [para-end] 60px [main-end] minmax(1em, 1fr) [full-end];
   grid-auto-rows: minmax(min-content, max-content);
 
   > * {
@@ -26,10 +26,10 @@ export const Content = styled.div`
   }
 `
 
-export default ({ children }) => {
+export default ({ location, children }) => {
   return (
     <Container>
-      <Header />
+      <Header location={location}/>
       <Content>{children}</Content>
       <Footer />
     </Container>
