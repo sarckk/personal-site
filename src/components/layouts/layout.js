@@ -5,7 +5,7 @@ import Footer from "../footer"
 import { Search } from "../header/search"
 
 const Container = styled.div`
-  min-height: 100%;
+  flex: 1;
   width: 100%;
   display: flex;
   flex-direction: column;
