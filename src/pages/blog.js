@@ -1,62 +1,133 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { ExtraDetails } from "../components/page-elements"
 import { graphql, Link } from "gatsby"
-import Img from "gatsby-image"
 import { Loader } from "../components/utils/loader"
 import { truncate } from "../util/truncate"
+import BackgroundImage from "gatsby-background-image"
+import Wave from "../images/wave.inline.svg"
 
-const BlogPost = styled(Link)`
-  display: flex;
+const BlogPost = styled.li`
   background-color: ${({ theme }) => theme.colors.white};
-  align-items: stretch;
   cursor: pointer;
-  text-decoration: none;
-  color: ${({ theme }) => theme.colors.black};
   transition: all 0.3s ease;
-  width: 100%;
+  height: 350px;
   box-shadow: ${({ theme }) => theme.boxShadow.postPreview};
-  height: 250px;
-  margin: ${({ theme }) => theme.spacing["4"]} 0;
+  margin: 0 auto ${({ theme }) => theme.spacing["8"]} auto;
 
   :hover {
     box-shadow ${({ theme }) => theme.boxShadow.postPreviewHover};
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+    flex: 1 0 100%;
+    height: 250px;
+  `};
+`
+
+const BlogLink = styled(Link)`
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.black};
+  height: 100%;
+  width: 100%;
+  display: block;
+`
+
+const BlogPostContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+
+  ${({ theme }) => theme.tabletPortrait`
+    flex-direction: row;
+  `};
 `
 
 const PostTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSize["2xl"]};
+  font-size: ${({ theme }) => theme.fontSize.xl};
   font-family: ${({ theme }) => theme.font.sans};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  line-height: ${({ theme }) => theme.lineHeight.tight};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  line-height: ${({ theme }) => theme.lineHeight.none};
+  letter-spacing: ${({ theme }) => theme.letterSpacing.tight};
+
+  ${({ theme }) => theme.tabletLandscape`
+    font-size: ${({ theme }) => theme.fontSize["2xl"]};
+  `};
 `
 
 const PostDetails = styled.div`
-  padding: 3rem 4rem;
-  flex: 0 0 50%;
+  padding: ${({ theme }) => theme.spacing["6"]}
+    ${({ theme }) => theme.spacing["8"]};
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  ${({ theme }) => theme.tabletPortrait`
+  padding: ${({ theme }) => theme.spacing["8"]}
+    ${({ theme }) => theme.spacing["10"]};
+  `};
 `
 
 const PostDesc = styled.p`
   margin-top: ${({ theme }) => theme.spacing["4"]};
   font-size: ${({ theme }) => theme.fontSize.sm};
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  ${({ theme }) => theme.tabletLandscape`
+    font-size: ${({ theme }) => theme.fontSize.base};
+  `};
 `
 
-const PostThumbnail = styled.div`
-  flex: 1 0 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const PostThumbnail = styled(BackgroundImage)`
+  order: -1;
+  flex: 0 0 40%;
+
+  ${({ theme }) => theme.tabletPortrait`
+    order: initial;
+  `};
 `
 
-const WaveBG = styled.div`
+const TopWave = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
   z-index: -2;
+`
+
+const BlogWrapper = styled.div`
+  grid-column: full;
+  width: 100%;
+  margin: 0 auto;
+
+  ${({ theme }) => theme.tabletPortrait`
+    width: 650px;
+  `};
+
+  ${({ theme }) => theme.tabletLandscape`
+    width: 770px;
+  `};
+`
+
+const BlogUL = styled.ul`
+  max-width: 400px;
+  display: block;
+  flex-wrap: wrap;
+  list-style: none;
+  align-items: stretch;
+  margin: 0 auto;
+
+  ${({ theme }) => theme.tabletPortrait`
+    display: flex;
+    width: 100%;
+    max-width: none;
+  `};
 `
 
 const DESC_PRUNE_LENGTH = 100
@@ -68,6 +139,28 @@ const BlogPreviewPage = ({ location, data }) => {
   const [allPostsShown, setAllPostsShown] = useState(
     postsToShow >= edges.length
   )
+  const [isTabletPortrait, setIsTabletPortrait] = useState(false)
+
+  useEffect(() => {
+    if (window === undefined) {
+      return
+    }
+
+    const mql = window.matchMedia("(min-width: 768px)")
+
+    const mediaListener = media => {
+      if (media.matches) {
+        setIsTabletPortrait(true)
+      } else {
+        setIsTabletPortrait(false)
+      }
+    }
+
+    mediaListener(mql)
+    mql.addListener(mediaListener)
+
+    return () => mql.removeListener(mediaListener)
+  }, [])
 
   const loadMorePosts = () => {
     console.log("Loading more posts...")
@@ -85,61 +178,47 @@ const BlogPreviewPage = ({ location, data }) => {
 
   return (
     <Layout location={location}>
-      {edges.slice(0, postsToShow).map(({ node }, index) => {
-        const description = node.frontmatter.description
-        const truncatedDesc = truncate(description, DESC_PRUNE_LENGTH)
-        let featuredImgFixed =
-          node.frontmatter.featuredImage.childImageSharp.fixed
+      <BlogWrapper>
+        <BlogUL>
+          {edges.slice(0, postsToShow).map(({ node }, index) => {
+            const description = node.frontmatter.description
+            const truncatedDesc = truncate(description, DESC_PRUNE_LENGTH)
+            let featuredImg =
+              node.frontmatter.featuredImage.childImageSharp.fluid
 
-        return (
-          <BlogPost key={index} to={node.fields.pathName}>
-            <PostDetails>
-              <PostTitle>{node.frontmatter.title}</PostTitle>
-              <ExtraDetails>
-                <span style={{ marginRight: "10px" }}>
-                  {node.frontmatter.date.toUpperCase()}
-                </span>
-                <span>{node.timeToRead} MIN READ</span>
-              </ExtraDetails>
-              <PostDesc>{truncatedDesc}</PostDesc>
-            </PostDetails>
-            <PostThumbnail>
-              <Img
-                fixed={featuredImgFixed}
-                imgStyle={{ objectFit: "contain" }}
-              />
-            </PostThumbnail>
-          </BlogPost>
-        )
-      })}
-      {!allPostsShown && <Loader onVisible={loadMorePosts} />}
-      <WaveBG>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-          <defs>
-            <linearGradient
-              id="grad1"
-              gradientTransform="rotate(90)"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%"
-            >
-              <stop
-                offset="0%"
-                style={{ stopColor: "#eef2f3", stopOpacity: 1 }}
-              />
-              <stop
-                offset="100%"
-                style={{ stopColor: "#8e9eab", stopOpacity: 1 }}
-              />
-            </linearGradient>
-          </defs>
-          <path
-            fill="url(#grad1)"
-            d="M0,128L48,149.3C96,171,192,213,288,213.3C384,213,480,171,576,176C672,181,768,235,864,229.3C960,224,1056,160,1152,138.7C1248,117,1344,139,1392,149.3L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
-          ></path>
-        </svg>
-      </WaveBG>
+            return (
+              <BlogPost key={index}>
+                <BlogLink to={`/${node.fields.pathName}`}>
+                  <BlogPostContent>
+                    <PostDetails>
+                      <PostTitle>{node.frontmatter.title}</PostTitle>
+                      <ExtraDetails>
+                        <span style={{ marginRight: "10px" }}>
+                          {node.frontmatter.date.toUpperCase()}
+                        </span>
+                        <span>
+                          <span role="img" aria-label="book">
+                            &#x1f4d6;
+                          </span>
+                          {node.timeToRead} MIN READ
+                        </span>
+                      </ExtraDetails>
+                      <PostDesc>{truncatedDesc}</PostDesc>
+                    </PostDetails>
+                    <PostThumbnail fluid={featuredImg} />
+                  </BlogPostContent>
+                </BlogLink>
+              </BlogPost>
+            )
+          })}
+          {!allPostsShown && <Loader onVisible={loadMorePosts} />}
+        </BlogUL>
+      </BlogWrapper>
+      {isTabletPortrait && (
+        <TopWave>
+          <Wave />
+        </TopWave>
+      )}
     </Layout>
   )
 }
@@ -163,8 +242,8 @@ export const query = graphql`
             description
             featuredImage {
               childImageSharp {
-                fixed(width: 250, height: 250) {
-                  ...GatsbyImageSharpFixed_tracedSVG
+                fluid(maxWidth: 400) {
+                  ...GatsbyImageSharpFluid_tracedSVG
                 }
               }
             }

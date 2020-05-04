@@ -1,62 +1,66 @@
 import React from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
-import {
-  Headings,
-  P,
-  StyledAnchor,
-} from "../components/page-elements"
+import { Headings, P, StyledAnchor } from "../components/page-elements"
+import me from "../images/me.jpeg"
 
 const AboutContainer = styled.div`
-  // mobile-first
-
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
 
-  @media only screen and (min-width: 500px) {
+  ${({ theme }) => theme.tabletPortrait`
     & {
       grid-template-columns: 1fr 1fr;
     }
-  }
+  `};
 `
 
 const AboutTextFirstPart = styled.div`
-  @media only screen and (min-width: 500px) {
+  padding-right: 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    padding-right: 30px;
     & {
       order: 1;
     }
-  }
+  `};
 `
 
 const AboutTextSecondPart = styled.div`
-  @media only screen and (min-width: 500px) {
+  ${({ theme }) => theme.tabletPortrait`
     & {
       order: 3;
       grid-column: 1 / span 2;
     }
-  }
+  `};
 `
 
-const TreeArea = styled.div`
+const AboutPic = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dotted ${({ theme }) => theme.colors.gray[400]};
   color: ${({ theme }) => theme.colors.gray[400]};
 
-  @media only screen and (min-width: 500px) {
+  ${({ theme }) => theme.tabletPortrait`
     & {
       order: 2;
     }
-  }
+  `};
+`
+
+const MyPic = styled.img`
+  max-width: 100%;
+  clip-path: url(#blob);
 `
 
 export default () => {
   return (
     <Layout>
       <AboutContainer>
-        <TreeArea>Placeholder</TreeArea>
+        <AboutPic>
+          <MyPic src={me} alt="me" />
+        </AboutPic>
         <AboutTextFirstPart>
           <Headings.SerifH1>Hey, I'm Shin</Headings.SerifH1>
           <P>
@@ -77,11 +81,10 @@ export default () => {
           <P>
             I'm passionate about the intersection between technology and
             human-centric design. To me, programming represents a tool for
-            translation. Yet instead of translating one language to another, it
-            mediates the translation of ideas to reality and, by extension, our
-            subjective experiences. Gaining mastery of a programming language is
-            thus akin to gaining creative freedom — freedom to make any ideas
-            come alive. How empowering!
+            translation, mediating the translation of ideas to reality and, by
+            extension, our subjective experiences. Gaining mastery of a
+            programming language is thus akin to gaining creative freedom —
+            freedom to make any ideas come alive. How empowering!
           </P>
         </AboutTextFirstPart>
         <AboutTextSecondPart>
@@ -96,6 +99,16 @@ export default () => {
           </P>
         </AboutTextSecondPart>
       </AboutContainer>
+      <svg width="0" height="0">
+        <defs>
+          <clipPath id="blob" transform="translate(170,250) scale(0.95)">
+            <path
+              d="M142.1,-180C177.8,-139.3,196.3,-88.6,210.1,-33.6C224,21.4,233.2,80.7,214,132.4C194.7,184.2,147,228.3,93.2,241.7C39.4,255,-20.3,237.4,-64.4,207.9C-108.5,178.4,-137,137,-154,95C-171,53,-176.6,10.4,-169.4,-29.8C-162.2,-69.9,-142.1,-107.7,-111.8,-149.4C-81.4,-191,-40.7,-236.5,6.2,-243.9C53.1,-251.3,106.3,-220.7,142.1,-180Z"
+              fill="#FFB4BC"
+            />
+          </clipPath>
+        </defs>
+      </svg>
     </Layout>
   )
 }

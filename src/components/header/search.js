@@ -8,8 +8,10 @@ import {
   connectStateResults,
   Highlight,
   Index,
+  Configure,
+  connectPagination,
 } from "react-instantsearch-dom"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { UnstyledLink, ExtraDetails } from "../page-elements"
 
 const searchClient = algoliasearch(
@@ -28,6 +30,7 @@ const proxiedSearchClient = {
           nbHits: 0,
           nbPages: 0,
           processingTimeMS: 0,
+          extra: "rofl",
         })),
       })
     }
@@ -37,83 +40,111 @@ const proxiedSearchClient = {
 }
 
 const SearchArea = styled.div`
-  flex-grow: 1;
-  margin-left: 5px;
   position: relative;
-  height: 25px;
+  width: 80%;
+  margin: ${({ theme }) => theme.spacing["12"]} auto;
+
+  ${({ theme }) => theme.tabletPortrait`
+    flex-grow: 1;
+    margin: 0 0 0 5px;
+  `};
 `
 
-const SearchForm = styled.form``
-
 const SearchInput = styled.input`
-  width: 100%;
-  height: 100%;
   border: 0;
-  padding: 0 5px;
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid ${({ theme }) => theme.colors.gray[700]};
+  border-radius: 4px;
+
   font-size: ${({ theme }) => theme.fontSize.base};
   background-color: ${({ theme }) => theme.colors.transparent};
-
-  &:focus {
-    outline: none;
-  }
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.gray[600]};
     font-size: ${({ theme }) => theme.fontSize.base};
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+    padding: 0 5px; 
+    border: none;
+    border-radius: 0;
+
+    :focus{
+      outline: none;
+    } 
+  `};
 `
 
 const HitBox = styled.div`
-  position: absolute;
-  top: 39px;
-  background-color: ${({ theme }) => theme.colors.white};
-  display: ${props => (props.visible ? "block" : "none")};
-  border-color: ${({ theme }) => theme.colors.gray[300]};
-  border-style: solid;
-  border-width: 0 1px 1px 1px;
-  box-shadow: 0px 25px 69px -36px rgba(133, 133, 133, 0.66);
-  overflow: overlay;
-  max-height: 603px;
+  display: block;
   width: 100%;
 
-  // credit: https://stackoverflow.com/questions/7492062/css-overflow-scroll-always-show-vertical-scroll-bar
-  ::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 4px;
-  }
+  ${({ theme }) => theme.tabletPortrait`
+    position: absolute;
+    top: 39px;
+    background-color: ${({ theme }) => theme.colors.white};
+    border-style: solid;
+    border-width: 0 1px 1px 1px;
+    box-sizing: border-box;
+    border-color: ${({ theme }) => theme.colors.gray[300]};
+    box-shadow: 0px 25px 69px -36px rgba(133, 133, 133, 0.66);
+    overflow: overlay;
+    max-height: 603px;
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-  }
+    ::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+    }
+  `};
 `
 
 const Hit = styled.div`
-  background-color: white;
+  background-color: transparent;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+
+  ${({ theme }) => theme.tabletPortrait`
+    padding: ${({ theme }) => theme.spacing["2"]}
+      ${({ theme }) => theme.spacing["4"]};
+  `};
 `
 
 const BlogHit = styled(Hit)`
-  padding: ${({ theme }) => theme.spacing["2"]}
-    ${({ theme }) => theme.spacing["4"]};
-  height: 100px;
+  padding: ${({ theme }) => theme.spacing["8"]} 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    height: 120px;
+  `};
 `
 
 const BookHit = styled(Hit)`
-  padding: ${({ theme }) => theme.spacing["2"]}
-    ${({ theme }) => theme.spacing["4"]};
-  height: 50px;
+  padding: ${({ theme }) => theme.spacing["4"]} 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    height: 50px;
+  `};
 `
 
 const HitTitle = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-size: ${({ theme }) => theme.fontSize.base};
   font-family: ${({ theme }) => theme.font.sans};
   line-height: ${({ theme }) => theme.lineHeight.tight};
   width: 80%;
+  margin-bottom: ${({ theme }) => theme.spacing["2"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  `};
 `
 
 const HitDesc = styled.div`
@@ -144,21 +175,35 @@ const HitDate = styled(ExtraDetails)`
 
 const HitSeparator = styled.div`
   height: 1px;
-  width: 95%;
-  margin: 0 auto;
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.gray[300]};
+  margin: 5px 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    width: 95%;
+    margin: 5px auto;
+  `};
 `
 
 const SearchIndexInfo = styled.div`
-  padding: ${({ theme }) => theme.spacing["1"]}
-    ${({ theme }) => theme.spacing["4"]};
-  background-color: ${({ theme }) => theme.colors.gray[100]};
-  font-size: ${({ theme }) => theme.fontSize.xs};
   font-family: ${({ theme }) => theme.font.sans};
-  color: ${({ theme }) => theme.colors.gray[700]};
-  border-style: solid;
-  border-color: ${({ theme }) => theme.colors.gray[300]};
-  border-width: 1px 0 1px 0;
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  margin: ${({ theme }) => theme.spacing["6"]} 0
+    ${({ theme }) => theme.spacing["1"]} 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    padding: ${({ theme }) => theme.spacing["1"]}
+      ${({ theme }) => theme.spacing["4"]};
+    background-color: ${({ theme }) => theme.colors.gray[100]};
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    font-weight: ${({ theme }) => theme.fontWeight.normal};
+    color: ${({ theme }) => theme.colors.gray[700]};
+    border-style: solid;
+    border-color: ${({ theme }) => theme.colors.gray[300]};
+    border-width: 1px 0 1px 0;
+    margin: 0;
+  `};
 `
 
 const BlogHits = connectHits(({ hits }) => (
@@ -170,7 +215,7 @@ const BlogHits = connectHits(({ hits }) => (
           return (
             <React.Fragment key={i}>
               <BlogHit>
-                <UnstyledLink to={hit.path}>
+                <UnstyledLink to={`/${hit.path}`}>
                   <HitTitle>
                     <Highlight attribute="title" hit={hit} tagName="strong" />
                   </HitTitle>
@@ -202,7 +247,7 @@ const BookHits = connectHits(({ hits }) => (
           return (
             <React.Fragment key={i}>
               <BookHit>
-                <UnstyledLink to={hit.path}>
+                <UnstyledLink to={`/${hit.path}`}>
                   <BookHitDesc>
                     <Highlight attribute="title" hit={hit} tagName="strong" />
                     {" ("}
@@ -229,14 +274,14 @@ const SearchBox = connectSearchBox(
     }, [clearText, refine])
 
     return (
-      <SearchForm>
+      <form>
         <SearchInput
           ref={forwardRef}
           placeholder="Start searching..."
           value={currentRefinement}
           onChange={e => refine(e.currentTarget.value)}
         />
-      </SearchForm>
+      </form>
     )
   }
 )
@@ -245,29 +290,68 @@ const RefForwardedSearchBox = React.forwardRef((props, ref) => (
   <SearchBox {...props} forwardRef={ref} />
 ))
 
-const StateResults = connectStateResults(({ searchResults, visible }) => {
-  const hasResults = searchResults && searchResults.nbHits !== 0
+const PaginationUL = styled.ul`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`
 
-  if (!hasResults || !visible) {
-    return <> </>
+const PaginationLI = styled.li`
+  border: 1px solid ${({ theme }) => theme.colors.gray[400]};
+  margin: 0 5px;
+  border-radius: 2px;
+`
+
+const PaginationAnchor = styled.a`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  line-height: 20px;
+  color: ${props => (props.isSelected ? "white" : "black")};
+  background-color: ${props =>
+    props.isSelected
+      ? css`
+          ${({ theme }) => theme.colors.gray[600]}
+        `
+      : "white"};
+  text-decoration: none;
+`
+
+const Pagination = connectPagination(
+  ({ currentRefinement, nbPages, refine, createURL }) => {
+    if (nbPages === 0) {
+      return <></>
+    }
+
+    return (
+      <PaginationUL>
+        {new Array(nbPages).fill(null).map((_, index) => {
+          const page = index + 1
+          const isSelected = currentRefinement === page
+
+          return (
+            <PaginationLI key={index}>
+              <PaginationAnchor
+                isSelected={isSelected}
+                href={createURL(page)}
+                onClick={event => {
+                  event.preventDefault()
+                  refine(page)
+                }}
+              >
+                {page}
+              </PaginationAnchor>
+            </PaginationLI>
+          )
+        })}
+      </PaginationUL>
+    )
   }
+)
 
-  return (
-    <>
-      <HitBox visible={visible}>
-        <Index indexName="blog">
-          <BlogHits />
-        </Index>
-
-        <Index indexName="books">
-          <BookHits />
-        </Index>
-      </HitBox>
-    </>
-  )
-})
-
-export const Search = React.memo(({ visible }) => {
+export const Search = React.memo(({ visible, type }) => {
   const searchInputRef = useRef(null)
   const [clearText, setClearText] = useState(true)
 
@@ -282,10 +366,20 @@ export const Search = React.memo(({ visible }) => {
 
   return (
     <SearchArea>
-      <InstantSearch indexName={"blog"} searchClient={proxiedSearchClient}>
+      <InstantSearch indexName="blog" searchClient={proxiedSearchClient}>
         <RefForwardedSearchBox ref={searchInputRef} clearText={clearText} />
-
-        <StateResults visible={visible} />
+        <HitBox className="hitbox">
+          <Index indexName="blog">
+            {type === "mobile" && <Configure hitsPerPage={3} />}
+            <BlogHits />
+            {type === "mobile" && <Pagination />}
+          </Index>
+          <Index indexName="books">
+            {type === "mobile" && <Configure hitsPerPage={3} />}
+            <BookHits />
+            {type === "mobile" && <Pagination />}
+          </Index>
+        </HitBox>
       </InstantSearch>
     </SearchArea>
   )

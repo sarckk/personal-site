@@ -4,7 +4,7 @@ import Layout from "../components/layouts/layout"
 import Img from "gatsby-image"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { MDXProvider } from "@mdx-js/react"
-import { ExtraDetails, Headings, HR } from "../components/page-elements"
+import { ExtraDetails, HR } from "../components/page-elements"
 import MDX from "mdx-scoped-runtime"
 import styled from "styled-components"
 import {
@@ -17,31 +17,57 @@ import { Content } from "../components/layouts/layout"
 
 const PostDetails = styled.div`
   display: flex;
-  margin-bottom: ${({ theme }) => theme.spacing["12"]};
+  flex-direction: column;
+  margin-bottom: ${({ theme }) => theme.spacing["1"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    flex-direction: row;
+  margin-bottom: ${({ theme }) => theme.spacing["8"]};
+  `};
 `
 
 const TextDetails = styled.div`
-  flex: 0 0 50%;
-  max-width: 50%;
+  flex: 1 1 50%;
   padding: 0 ${({ theme }) => theme.spacing["3"]};
+  margin-top: ${({ theme }) => theme.spacing["6"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    margin-top:0;
+  `};
 `
 
 const PostImage = styled.div`
-  flex: 0 0 50%;
-  max-width: 50%;
-  padding-right: ${({ theme }) => theme.spacing["3"]};
+  flex: 1 0 50%;
+  padding: 0 ${({ theme }) => theme.spacing["3"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    padding: 0;
+    padding-right: ${({ theme }) => theme.spacing["3"]};
+  `};
 `
 
-const Title = styled(Headings.H2)`
+const Title = styled.h2`
   margin-top: 0;
-  margin-bottom: ${({ theme }) => theme.spacing["2"]};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  font-size: ${({ theme }) => theme.fontSize["3xl"]};
+  letter-spacing: ${({ theme }) => theme.lineHeight.tight};
+  line-height: ${({ theme }) => theme.lineHeight.none};
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
+
+  ${({ theme }) => theme.tabletLandscape`
+    font-size: ${({ theme }) => theme.fontSize["4xl"]}; 
+  `};
 `
 
 const Description = styled.div`
   font-family: ${({ theme }) => theme.font.sans};
-  font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.colors.gray[700]};
   margin-bottom: ${({ theme }) => theme.spacing["3"]};
+  font-size: ${({ theme }) => theme.fontSize.base};
+
+  ${({ theme }) => theme.tabletLandscape`
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  `};
 `
 
 const MarginExtraDetails = styled(ExtraDetails)`
@@ -65,14 +91,6 @@ export const BlogTemplate = ({
     >
       <>
         <PostDetails>
-          <TextDetails>
-            <Title>{title}</Title>
-            <Description>{description}</Description>
-            <MarginExtraDetails>
-              <div>{date.toUpperCase()}</div>
-              {!isPreview && <div>{timeToRead} MIN READ</div>}
-            </MarginExtraDetails>
-          </TextDetails>
           <PostImage>
             {isPreview ? (
               <img src={featuredImage} alt="Featured" />
@@ -80,6 +98,21 @@ export const BlogTemplate = ({
               <Img fluid={featuredImage} />
             )}
           </PostImage>
+          <TextDetails>
+            <Title>{title}</Title>
+            <Description>{description}</Description>
+            <MarginExtraDetails>
+              <div>{date.toUpperCase()}</div>
+              {!isPreview && (
+                <div>
+                  <span role="img" aria-label="book">
+                    &#x1f4d6;
+                  </span>
+                  {timeToRead} MIN READ
+                </div>
+              )}
+            </MarginExtraDetails>
+          </TextDetails>
         </PostDetails>
         <HR />
         {isPreview ? (
@@ -136,7 +169,7 @@ export const query = graphql`
         description
         featuredImage {
           childImageSharp {
-            fluid(maxWidth: 400) {
+            fluid(maxWidth: 768) {
               ...GatsbyImageSharpFluid
             }
           }

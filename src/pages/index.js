@@ -6,7 +6,7 @@ import { throttle } from "lodash"
 import { Link } from "gatsby"
 
 const Heading = styled.div`
-  font-size: ${({ theme }) => theme.fontSize["5xl"]};
+  font-size: min(max(35px, 4vw), 50px);
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-top: ${({ theme }) => theme.spacing["7"]};
   margin-bottom: ${({ theme }) => theme.spacing["0"]};
@@ -21,7 +21,7 @@ const HomeLink = styled(Link)`
   margin-right: ${({ theme }) => theme.spacing["2"]};
   margin-left: ${({ theme }) => theme.spacing["2"]};
   transition all 0.3s ease;
-  font-size: ${({ theme }) => theme.fontSize["2xl"]};
+  font-size: min(max(20px, 4vw), 25px);
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-family: ${({ theme }) => theme.font.alternateSerif};
   text-decoration: none;
@@ -43,6 +43,10 @@ const HomeNav = () => (
 
 export default () => {
   useEffect(() => {
+    if (window && !window.matchMedia("(min-width: 992px)").matches) {
+      return
+    }
+
     const maxLeftTranslationAdjustment = -20
     const maxRightTranslationAdjustment = 20
     const maxUpTranslationAdjustment = -5

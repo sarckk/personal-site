@@ -21,14 +21,21 @@ import styled from "styled-components"
 
 export const ParaContentWrapper = styled.div`
   line-height: ${({ theme }) => theme.lineHeight.relaxed};
-  grid-column: full;
   display: inherit;
   grid-template-columns: inherit;
   grid-auto-rows: inherit;
+  grid-column: full;
+  font-size: ${({ theme }) => theme.fontSize.lg};
 
   > * {
-    grid-column: para;
+    grid-column: main;
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+    > * {
+      grid-column: para;
+    }
+  `};
 `
 
 export const CMS_SHORTCODES = {

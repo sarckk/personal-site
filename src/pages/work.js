@@ -6,35 +6,48 @@ import { graphql } from "gatsby"
 
 const WorkGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   gap: 20px;
   padding: 0 18px;
-  margin-bottom: ${({ theme }) => theme.spacing["3"]};
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    grid-template-columns: 1fr 1fr;
+  `};
 `
 
-const Repo = styled.div`
+const Repo = styled.a`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing["2"]} 0;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  color: ${({ theme }) => theme.colors.gray[900]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[400]};
+  padding: 6px 12px 10px 12px;
 
   &:hover {
-    a {
+    #repoName {
       color: ${({ theme }) => theme.colors.anchorHover};
     }
-
-    div#langs {
-      opacity: 1;
-    }
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+    border: 0;
+    padding: 0;
+
+    &:hover{
+      div#langs{
+        opacity: 1;
+      }
+    }
+  `};
 `
-const RepoName = styled.a`
+const RepoName = styled.div`
   font-family: ${({ theme }) => theme.font.sans};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-size: ${({ theme }) => theme.fontSize.lg};
-  color: ${({ theme }) => theme.colors.gray[900]};
-  text-decoration: none;
   transition: color 0.2s ease;
 `
 
@@ -47,28 +60,36 @@ const RepoDesc = styled.div`
 `
 
 const RepoLanguages = styled.div`
-  opacity: 0;
+  opacity: 1;
   display: flex;
   align-items: center;
   transition: all 0.4s ease;
+
+  ${({ theme }) => theme.tabletPortrait`
+    opacity: 0;
+  `};
 `
 
 const WorkHeader = styled.h2`
   display: grid;
-  grid-template-columns: 10px auto minmax(20px, 1fr);
+  grid-template-columns: 22px auto minmax(20px, 1fr);
   gap: 8px;
   align-items: center;
   width: 100%;
   font-family: ${({ theme }) => theme.font.sans};
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.colors.gray[800]};
-  margin-bottom: ${({ theme }) => theme.spacing["3"]};
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
 
   :before,
   :after {
     content: "";
     border-top: 1px solid ${({ theme }) => theme.colors.gray[700]};
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+     grid-template-columns: 10px auto minmax(20px, 1fr);
+  `};
 `
 
 const ComingSoon = styled.p`
@@ -79,9 +100,9 @@ const ComingSoon = styled.p`
 
 const Lang = styled.span`
   font-family: ${({ theme }) => theme.font.sans};
-  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
   color: ${({ theme }) => theme.colors.gray[800]};
-  margin: 0 5px;
+  margin: 0 5px 0 0;
 
   :before {
     content: "\\A0";
@@ -93,31 +114,43 @@ const Lang = styled.span`
     line-height: 9px;
     margin-right: 2px;
   }
+
+  ${({ theme }) => theme.tabletPortrait`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  `};
+`
+
+const WorkTitle = styled(Headings.SerifH1)`
+  text-align: center;
+
+  ${({ theme }) => theme.tabletPortrait`
+    text-align: left;
+  `};
 `
 
 export default ({ data }) => {
   return (
     <Layout>
-      <Headings.SerifH1>Work</Headings.SerifH1>
+      <WorkTitle>Work</WorkTitle>
       <WorkHeader>Personal projects</WorkHeader>
       <WorkGrid>
-        {data.github.user.repositories.edges.map(({ node }) => {
-          console.log("NODE LANGUAGES", node.languages)
+        {data.github.user.repositories.edges.map(({ node }, index) => {
           return (
-            <Repo>
-              <RepoName
-                href={node.url}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {node.name}
-              </RepoName>
+            <Repo
+              key={`repo${index}`}
+              href={node.url}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <RepoName id="repoName">{node.name}</RepoName>
               <RepoDesc
                 dangerouslySetInnerHTML={{ __html: node.descriptionHTML }}
               ></RepoDesc>
               <RepoLanguages id="langs">
-                {node.languages.edges.map(({ node }) => (
-                  <Lang color={node.color}>{node.name}</Lang>
+                {node.languages.edges.map(({ node }, index) => (
+                  <Lang key={`lang${index}`} color={node.color}>
+                    {node.name}
+                  </Lang>
                 ))}
               </RepoLanguages>
             </Repo>

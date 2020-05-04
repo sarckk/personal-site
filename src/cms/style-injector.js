@@ -7,8 +7,6 @@ const StyleSheetInjector = ({ children }) => {
 
   useLayoutEffect(() => {
     const iframe = document.querySelector("#nc-root iframe")
-    // const iframe = document.querySelector(".nc-previewPane-frame")
-    // const iframe =document.getElementsByTagName('iframe')[0]
     const iframeHead = iframe.contentDocument.head
     iframeRef.current = iframeHead
   })

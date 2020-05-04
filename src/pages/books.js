@@ -11,12 +11,15 @@ const BookGrid = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   margin-top: ${({ theme }) => theme.spacing["10"]};
+  gap: ${({ theme }) => theme.spacing["10"]};
 
   ${({ theme }) =>
     theme.mobileLandscape`
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-gap: ${({ theme }) => theme.spacing["10"]};
-  `};
+      grid-template-columns: 1fr 1fr;`};
+
+  ${({ theme }) =>
+    theme.tabletLandscape`
+      grid-template-columns: 1fr 1fr 1fr;`};
 `
 
 const BookDiv = styled.div`
@@ -53,7 +56,7 @@ const BookTilt = styled(Tilt)`
 
 const Book = ({ title, authors, coverImg, path }) => (
   <BookDiv>
-    <Link to={path}>
+    <Link to={`/${path}`}>
       <BookTilt options={{ scale: 1.05 }}>
         <Img fixed={coverImg} alt={title} />
       </BookTilt>
@@ -70,10 +73,10 @@ export default ({ data }) => {
     <Layout>
       <PageDesc>
         <Headings.SerifH1>Books</Headings.SerifH1>
-        <P>
+        <P style={{ maxWidth: "600px" }}>
           Here are some of the books that I've read recently and my thoughts on
-          them. <br />I also keep a list of books I look forward to reading,
-          which you can find{" "}
+          them. I also keep a list of books I look forward to reading, which you
+          can find{" "}
           <StyledAnchor
             href={`booklist.pdf`}
             rel="noopener noreferrer"

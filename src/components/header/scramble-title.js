@@ -1,23 +1,19 @@
 import React, { useEffect, useRef } from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import styled, { css } from "styled-components"
+import styled from "styled-components"
 
 const SiteTitle = styled(Link)`
   font-size: ${({ theme }) => theme.fontSize["2xl"]};
-  margin-right: auto;
   z-index: 2;
   text-decoration: none;
-  color: ${props =>
-    props.isOnBlog
-      ? css`
-          ${({ theme }) => theme.colors.gray[300]};
-        `
-      : css`
-          ${({ theme }) => theme.colors.black};
-        `};
+  color: ${({ theme }) => theme.colors.black};
+
+  ${({ theme }) => theme.tabletPortrait`
+    margin-right: auto;
+  `};
 `
 
-export const ScrambleTitle = ({ isOnBlog }) => {
+export const ScrambleTitle = () => {
   const siteTitle = useRef(null)
 
   const data = useStaticQuery(
@@ -32,7 +28,13 @@ export const ScrambleTitle = ({ isOnBlog }) => {
     `
   )
 
-  useEffect(() => {
+ useEffect(() => {
+    if (window && !window.matchMedia("(min-width: 992px)").matches) {
+      return
+    }
+    console.log("SCRAMBLING....")
+    // The following lines of code in this useEffect hook somehow makes the scramble animation work
+    // I don't understand exactly why, but it does.
     const el = siteTitle.current
     const originalText = el.innerText.substr(0)
     const NUMBER_OF_REPLACES = 4
@@ -125,7 +127,7 @@ export const ScrambleTitle = ({ isOnBlog }) => {
   }, [])
 
   return (
-    <SiteTitle isOnBlog={isOnBlog} ref={siteTitle} to="/">
+    <SiteTitle ref={siteTitle} to="/">
       {data.site.siteMetadata.title}
     </SiteTitle>
   )

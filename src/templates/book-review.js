@@ -28,12 +28,29 @@ const Title = styled(Headings.H1)`
   font-family: ${({ theme }) => theme.font.serif};
   line-height: normal;
   margin: 0;
+  font-size: ${({ theme }) => theme.fontSize["3xl"]};
+
+  ${({ theme }) => theme.mobileLandscape`
+    font-size: ${({ theme }) => theme.fontSize["4xl"]};
+  `};
+
+  ${({ theme }) => theme.tabletPortrait`
+    font-size: ${({ theme }) => theme.fontSize["5xl"]};
+  `};
 `
 
 const Authors = styled.div`
   color: ${({ theme }) => theme.colors.gray[900]};
-  font-size: ${({ theme }) => theme.fontSize.lg};
   margin-bottom: ${({ theme }) => theme.spacing["3"]};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+
+  ${({ theme }) => theme.mobileLandscape`
+    font-size: ${({ theme }) => theme.fontSize.base};
+  `};
+
+  ${({ theme }) => theme.tabletPortrait`
+    font-size: ${({ theme }) => theme.fontSize.lg};
+  `};
 `
 
 const BookCover = styled.div`
@@ -46,6 +63,15 @@ const BookCover = styled.div`
 const Summary = styled.div`
   font-family: ${({ theme }) => theme.font.sans};
   margin-bottom: ${({ theme }) => theme.spacing["6"]};
+  font-size: ${({ theme }) => theme.fontSize.xs};
+
+  ${({ theme }) => theme.mobileLandscape`
+    font-size: ${({ theme }) => theme.fontSize.sm};
+  `};
+
+  ${({ theme }) => theme.tabletPortrait`
+    font-size: ${({ theme }) => theme.fontSize.base};
+  `};
 `
 
 const BookExternalLink = styled.div`
@@ -76,6 +102,18 @@ const RefLink = styled.a`
   }
 `
 
+const BookReviewWrapper = styled(ParaContentWrapper)`
+  > * {
+    grid-column: main;
+  }
+
+  ${({ theme }) => theme.tabletPortrait`
+    > * {
+      grid-column: para;
+    }
+  `};
+`
+
 export const BookReviewTemplate = ({
   title,
   authors,
@@ -89,7 +127,7 @@ export const BookReviewTemplate = ({
       condition={isPreview}
       wrapper={children => <Content>{children}</Content>}
     >
-      <ParaContentWrapper>
+      <BookReviewWrapper>
         <BookDetails>
           {!isPreview && (
             <BookCover>
@@ -135,7 +173,7 @@ export const BookReviewTemplate = ({
             <MDXRenderer>{body}</MDXRenderer>
           </MDXProvider>
         )}
-      </ParaContentWrapper>
+      </BookReviewWrapper>
     </ConditionalWrapper>
   )
 }

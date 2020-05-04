@@ -2,7 +2,6 @@ import { createGlobalStyle } from "styled-components"
 import reset from "styled-reset"
 import mediaQueries from "../util/media-queries"
 
-// theme settings from tailwind-full.config in tailwindcss/designing-with-tailwindcss
 export const theme = {
   font: {
     serif: "Charter, serif",
@@ -113,6 +112,7 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: ${({ theme }) => theme.fontWeight.normal};
      -webkit-font-smoothing: antialiased;
      -moz-osx-font-smoothing: grayscale;
+     height: 100%;
   }
 
   *, *:before, *:after {
@@ -124,15 +124,27 @@ export const GlobalStyle = createGlobalStyle`
   body {
     line-height: ${({ theme }) => theme.lineHeight.normal};
     letter-spacing: ${({ theme }) => theme.letterSpacing.normal};
-    margin: 0;
+    overflow: auto;
+    height: 100%;
   }  
 
-  html,
-  body,
-  #___gatsby,
-  #gatsby-focus-wrapper{
+  #___gatsby{
     height: 100%;
-    width: 100%;
+  }
+
+  #gatsby-focus-wrapper
+  {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .no-overflow{
+    overflow: hidden;
+  }
+
+  #gatsby-focus-wrapper{
+    position: relative;
   }
 
   em{
