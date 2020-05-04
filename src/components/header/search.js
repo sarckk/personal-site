@@ -15,8 +15,8 @@ import styled, { css } from "styled-components"
 import { UnstyledLink, ExtraDetails } from "../page-elements"
 
 const searchClient = algoliasearch(
-  process.env.ALGOLIA_APP_ID,
-  process.env.ALGOLIA_SEARCH_KEY
+  process.env.GATSBY_ALGOLIA_APP_ID,
+  process.env.GATSBY_ALGOLIA_SEARCH_KEY
 )
 
 // proxy for algoliasearch client to prevent sending user input to server

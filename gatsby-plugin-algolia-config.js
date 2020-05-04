@@ -81,15 +81,15 @@ const bookReviewQueries = [
 ]
 
 module.exports.blogConfig = {
-  appId: process.env.ALGOLIA_APP_ID,
-  apiKey: process.env.ALGOLIA_ADMIN_KEY,
+  appId: process.env.GATSBY_ALGOLIA_APP_ID,
+  apiKey: process.env.GATSBY_ALGOLIA_ADMIN_KEY,
   indexName: "blog",
   queries: blogQueries,
 }
 
 module.exports.booksConfig = {
-  appId: process.env.ALGOLIA_APP_ID,
-  apiKey: process.env.ALGOLIA_ADMIN_KEY,
+  appId: process.env.GATSBY_ALGOLIA_APP_ID,
+  apiKey: process.env.GATSBY_ALGOLIA_ADMIN_KEY,
   indexName: "books",
   queries: bookReviewQueries,
 }
