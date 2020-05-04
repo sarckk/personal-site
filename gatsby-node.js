@@ -96,6 +96,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   result.data.allMdx.edges.forEach(({ node }) => {
+    console.log("node Frontmatter: ", node.frontmatter)
     createPage({
       path: node.fields.pathName,
       component: path.resolve(
