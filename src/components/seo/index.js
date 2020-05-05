@@ -25,14 +25,6 @@ const SEO = ({ title, description, image }) => {
     image: `${siteUrl}${image || defaultImage}`,
   }
 
-  console.log("+-+-+-+-+-+-+-+")
-  console.log("PATHNAME: ", pathname)
-  console.log("SEO TITLE: ", seo.title)
-  console.log("SEO DESC: ", seo.description)
-  console.log("SEO URL: ", seo.url)
-  console.log("SEO IMAGE: ", seo.image)
-  console.log("+-+-+-+-+-+-+-+")
-
   return (
     <Helmet title={seo.title} titleTemplate={titleTemplate}>
       <html lang={siteLanguage} />

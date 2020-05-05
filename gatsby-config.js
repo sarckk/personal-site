@@ -11,7 +11,7 @@ module.exports = {
     description: `Shin's personal website & blog`,
     author: `Yong Hoon Shin`,
     url: `https://www.yonghoonshin.com`,
-    image: `/favicon.ico`,
+    image: `/favicon.png`,
     siteLanguage: `en`,
   },
   plugins: [
@@ -119,9 +119,9 @@ module.exports = {
         short_name: `Shin's Website`,
         start_url: `/`,
         display: `standalone`,
-        icon: `static/favicon.ico`,
+        icon: `static/favicon.png`,
       },
     },
-    'gatsby-plugin-offline',
+    "gatsby-plugin-offline",
   ],
 }
