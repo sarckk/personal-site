@@ -15,6 +15,7 @@ module.exports = {
     siteLanguage: `en`,
   },
   plugins: [
+    `gatsby-plugin-preact`,
     `gatsby-plugin-styled-components`,
     {
       resolve: "gatsby-plugin-web-font-loader",
@@ -28,7 +29,6 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-preload-fonts`,
     {
       resolve: "gatsby-plugin-react-svg",
       options: {
