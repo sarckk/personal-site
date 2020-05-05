@@ -112,5 +112,16 @@ module.exports = {
       options: algoliaConfig.booksConfig,
     },
     `gatsby-plugin-react-helmet`,
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Shin's Website | yonghoonshin.com`,
+        short_name: `Shin's Website`,
+        start_url: `/`,
+        display: `standalone`,
+        icon: `static/favicon.ico`,
+      },
+    },
+    'gatsby-plugin-offline',
   ],
 }
