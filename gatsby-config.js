@@ -6,9 +6,13 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    title: `yonghoonshin`,
-    description: `Personal website of Yong Hoon Shin`,
+    title: `Yong Hoon Shin`,
+    titleTemplate: `%s | yonghoonshin.com`,
+    description: `Shin's personal website & blog`,
     author: `Yong Hoon Shin`,
+    url: `https://www.yonghoonshin.com`,
+    image: `/favicon.ico`,
+    siteLanguage: `en`,
   },
   plugins: [
     `gatsby-plugin-styled-components`,
@@ -107,5 +111,6 @@ module.exports = {
       resolve: `gatsby-plugin-algolia`, // second time for "books" index
       options: algoliaConfig.booksConfig,
     },
+    `gatsby-plugin-react-helmet`,
   ],
 }

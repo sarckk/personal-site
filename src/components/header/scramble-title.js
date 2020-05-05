@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { Link, useStaticQuery, graphql } from "gatsby"
+import { Link } from "gatsby"
 import styled from "styled-components"
 
 const SiteTitle = styled(Link)`
@@ -16,19 +16,7 @@ const SiteTitle = styled(Link)`
 export const ScrambleTitle = () => {
   const siteTitle = useRef(null)
 
-  const data = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-          }
-        }
-      }
-    `
-  )
-
- useEffect(() => {
+  useEffect(() => {
     if (window && !window.matchMedia("(min-width: 992px)").matches) {
       return
     }
@@ -128,7 +116,7 @@ export const ScrambleTitle = () => {
 
   return (
     <SiteTitle ref={siteTitle} to="/">
-      {data.site.siteMetadata.title}
+      yonghoonshin
     </SiteTitle>
   )
 }

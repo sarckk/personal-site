@@ -3,10 +3,11 @@ import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { ExtraDetails } from "../components/page-elements"
 import { graphql, Link } from "gatsby"
-import { Loader } from "../components/utils/loader"
+import { Loader } from "../components/shared/loader"
 import { truncate } from "../util/truncate"
 import BackgroundImage from "gatsby-background-image"
 import Wave from "../images/wave.inline.svg"
+import SEO from "../components/seo"
 
 const BlogPost = styled.li`
   background-color: ${({ theme }) => theme.colors.white};
@@ -178,6 +179,7 @@ const BlogPreviewPage = ({ location, data }) => {
 
   return (
     <Layout location={location}>
+      <SEO title="Blog" />
       <BlogWrapper>
         <BlogUL>
           {edges.slice(0, postsToShow).map(({ node }, index) => {

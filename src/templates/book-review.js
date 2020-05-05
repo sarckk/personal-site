@@ -7,10 +7,11 @@ import { Headings, HR } from "../components/page-elements"
 import MDX from "mdx-scoped-runtime"
 import styled from "styled-components"
 import { CMS_SHORTCODES, CMS_COMPONENTS } from "../cms/cms-components"
-import { ConditionalWrapper } from "../components/utils/conditional-wrapper"
+import { ConditionalWrapper } from "../components/shared/conditional-wrapper"
 import { Content } from "../components/layouts/layout"
 import Img from "gatsby-image"
 import { ParaContentWrapper } from "../cms/cms-components"
+import SEO from "../components/seo"
 
 const BookDetails = styled.div`
   display: flex;
@@ -183,6 +184,11 @@ export default ({ data }) => {
 
   return (
     <Layout>
+      <SEO
+        title={post.frontmatter.title}
+        description={post.frontmatter.summary}
+        image={post.coverImg.childImageSharp.fixed.src}
+      />
       <BookReviewTemplate
         title={post.frontmatter.title}
         authors={post.frontmatter.authors}

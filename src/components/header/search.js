@@ -5,7 +5,6 @@ import {
   InstantSearch,
   connectHits,
   connectSearchBox,
-  connectStateResults,
   Highlight,
   Index,
   Configure,

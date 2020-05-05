@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { Headings, P, StyledAnchor } from "../components/page-elements"
 import me from "../images/me.jpeg"
+import SEO from "../components/seo"
 
 const AboutContainer = styled.div`
   display: grid;
@@ -57,6 +58,7 @@ const MyPic = styled.img`
 export default () => {
   return (
     <Layout>
+      <SEO title="About" />
       <AboutContainer>
         <AboutPic>
           <MyPic src={me} alt="me" />

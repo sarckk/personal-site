@@ -5,6 +5,7 @@ import { Headings, P, StyledAnchor } from "../components/page-elements"
 import { Link, graphql } from "gatsby"
 import Tilt from "react-tilt"
 import Img from "gatsby-image"
+import SEO from "../components/seo"
 
 const BookGrid = styled.div`
   display: grid;
@@ -71,6 +72,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
+      <SEO title="Books" />
       <PageDesc>
         <Headings.SerifH1>Books</Headings.SerifH1>
         <P style={{ maxWidth: "600px" }}>

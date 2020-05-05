@@ -4,6 +4,7 @@ import styled from "styled-components"
 import HomeLayout from "../components/layouts/home-layout"
 import { throttle } from "lodash"
 import { Link } from "gatsby"
+import SEO from "../components/seo"
 
 const Heading = styled.div`
   font-size: min(max(35px, 4vw), 50px);
@@ -117,6 +118,7 @@ export default () => {
 
   return (
     <HomeLayout>
+      <SEO />
       <Avatar />
       <Heading>yong hoon shin</Heading>
       <HomeNav />

@@ -12,8 +12,9 @@ import {
   CMS_SHORTCODES,
   CMS_COMPONENTS,
 } from "../cms/cms-components"
-import { ConditionalWrapper } from "../components/utils/conditional-wrapper"
+import { ConditionalWrapper } from "../components/shared/conditional-wrapper"
 import { Content } from "../components/layouts/layout"
+import SEO from "../components/seo"
 
 const PostDetails = styled.div`
   display: flex;
@@ -145,6 +146,11 @@ export default ({ data }) => {
 
   return (
     <Layout>
+      <SEO
+        title={post.frontmatter.title}
+        description={post.frontmatter.description}
+        image={featuredImageFluid.src}
+      />
       <BlogTemplate
         title={post.frontmatter.title}
         description={post.frontmatter.description}

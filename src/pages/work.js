@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { Headings } from "../components/page-elements"
 import { graphql } from "gatsby"
+import SEO from "../components/seo"
 
 const WorkGrid = styled.div`
   display: grid;
@@ -131,6 +132,7 @@ const WorkTitle = styled(Headings.SerifH1)`
 export default ({ data }) => {
   return (
     <Layout>
+      <SEO title="Work" />
       <WorkTitle>Work</WorkTitle>
       <WorkHeader>Personal projects</WorkHeader>
       <WorkGrid>
