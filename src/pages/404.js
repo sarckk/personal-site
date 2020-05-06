@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import Layout from "../components/layouts/layout"
 import styled from "styled-components"
 import SEO from "../components/seo"
@@ -7,7 +7,6 @@ import { Headings, StyledLink } from "../components/page-elements"
 const RandomImage = styled.img`
   max-width: 250px;
   display: block;
-  margin-bottom: ${({ theme }) => theme.spacing["6"]};
 
   ${({ theme }) => theme.tabletPortrait`
    max-width: 400px;
@@ -17,22 +16,31 @@ const RandomImage = styled.img`
 const PageDesc = styled.div`
   font-size: ${({ theme }) => theme.fontSize.lg};
 
-  &:nth-last-of-type(2) {
-    margin-bottom: ${({ theme }) => theme.spacing["4"]};
+  &:nth-last-of-type(3) {
   }
+`
+
+const RandomImageCaption = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.gray[800]};
+  margin-top: ${({ theme }) => theme.spacing["1"]};
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
+  font-family: ${({ theme }) => theme.font.sans};
 `
 
 export default () => {
   const [image, setImage] = useState(null)
+  const [op, setOp] = useState(null)
+  const [title, setTitle] = useState(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (window === undefined) {
       return
     }
 
     async function fetchImage() {
       const response = await fetch(
-        "https://www.reddit.com/r/hmmm.json?sort=top&t=week&limit=50"
+        "https://www.reddit.com/r/fakehistoryporn.json?sort=top&t=week&limit=50"
       )
 
       if (response.ok) {
@@ -46,6 +54,7 @@ export default () => {
 
         const randomChoice = Math.floor(Math.random() * safePosts.length)
         const data = safePosts[randomChoice].data
+        console.log("data: ", data)
 
         if (!data.url) {
           console.log("Invalid post -- No image url found")
@@ -53,6 +62,8 @@ export default () => {
         }
 
         setImage(data.url)
+        setTitle(data.title)
+        setOp(data.author)
       } else {
         console.warn("HTTP-ERROR: ", response.status)
       }
@@ -68,11 +79,18 @@ export default () => {
       <PageDesc>
         Looks like the page you're searching for doesn't exist!
       </PageDesc>
-      <PageDesc>
-        To compensate for your lost time, here's a random picture from{" "}
-        <strong>r/hmmm</strong>:
+      <PageDesc style={{ marginBottom: "20px" }}>
+        To compensate for your lost time, here's a piece of history from{" "}
+        <strong>r/fakehistoryporn</strong>:
       </PageDesc>
-      <RandomImage src={image} />
+      {image && (
+        <>
+          <RandomImage src={image} />
+          <RandomImageCaption>
+            <strong>{title}</strong> by u/{op}
+          </RandomImageCaption>
+        </>
+      )}
       <div>
         <StyledLink to="/">Go back to homepage</StyledLink>
       </div>
