@@ -14,7 +14,7 @@ As wonderful as these tools are, they have a catch: by design, they offer limite
 
 ## The challenge
 
-Obviously, being a computer science major, I couldn't possibly stoop to the lows of using **Wix**. Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since then. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, quite possibly underscoring the increased importance of delivering reliable, speedy experiences especially for critical web services, with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application[^1], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (having working knowledge in React also helped).
+***Obviously***, being a computer science major, I couldn't possibly stoop to the lows of using **Wix**. Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since then. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, quite possibly underscoring the increased importance of delivering reliable, speedy experiences especially for critical web services, with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application[^1], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (having working knowledge in React also helped).
 
 ## A high-level overview
 
@@ -217,6 +217,28 @@ All we need to do now is to run an asynchronous GraphQL query fetching allMdx (w
 
 You can check out the full source code [here](https://github.com/sarckk/personal-site/blob/master/gatsby-node.js).
 
+### Think Again Sunshine
+At this point, I hope I've demonstrated how, with Gatsby's help, MDX files are dynamically transformed to actual pages. Yet at this point, only a small portion of the website is complete. Thought you were done? ***Think again sunshine***.
+
+#### The pain of NetlifyCMS
+On hindsight, I never should have brought in NetlifyCMS. What Netlify's Content Management Service (it's about time I revealed what CMS stands for!) does is it provides a nice(r) interface for editing your markdown / mdx files complete with an admin dashboard, an editorial workflow (if enabled), rich text editor (albeit kinda shitty), and github as a single source of truth. So while this might have made sense in a real client work where the site administrator is unlikely to be a programmer (because why, then, would they have hired you to build their publishing platform?), it makes little sense for a solo project where I'm relatively comfortable dealing with the raw markdown syntax. Notwithstanding, I still think I learnt something of value by trying to grapple with integrating NetlifyCMS with Gatsby.
+
+Out of the box, the two work rather nicely, thought not void of some (known) pitfalls that you have to cautiously traverse around. The biggest headache, for me, was trying to customize the preview window of the CMS to more or less match how the post would look like on the website once published. 
+
+The way you do this is by calling something like:
+
+```javascript
+import CMS from "netlify-cms-app"
+
+CMS.registerPreviewTemplate("blog", props => (
+  <StyleSheetInjector>
+    <BlogPreviewTemplate {...props} />
+  </StyleSheetInjector>
+))
+```
+The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on this[this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window. *And voila, it works!*
+
+####
 
 [^1]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
 [^2]: Except instead of plain markdown, I'm using [MDX](https://mdxjs.com/), which allows me to insert JSX in markdown.
