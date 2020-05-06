@@ -252,17 +252,28 @@ import MDX from "mdx-scoped-runtime"
 ```
 Provide the wrapper, html-tags-to-custom-components mapping, and component shortcodes, and *voila*, the preview works!
 
-#### React Memo and Ref
-The last thing I want to write about is something specific to React. In React, we can use 
+#### Optimization using React Memo 
+The last thing I want to write about is something specific to React. In React, components re-render whenever there is a change in its props, its state, or when its parent re-renders. To prevent the last case from triggering unnecessary renders, we can use memoization in the form of the higher order component `React.memo`.[^7] This technique ended up preventing a lot of renders for my `Search` component which is imported by my header component, which in turn re-renders every time there is a change in the scroll direction. Without memoization, this would cause the `Search` component (which has a lot of parts to it in its own right) to re-render needlessly every time the user scrolls in a different direction. 
+
+```javascript
+export const Search = React.memo(({ visible, type }) => {
+  const searchInputRef = useRef(null)
+  const [clearText, setClearText] = useState(true)
+  ...and more
+```
+
+With `React.memo`, the `Search` component only gets re-rendered when either `visible` or `type` prop changes.  
+ 
 
 ### And so it goes..
 That about concludes what I have to say about my website. Obviously, there are other features of the website which took me long-ish time to figure out, but I think I covered more than enough material already. If you're interested you can always go check out the [source code](https://github.com/sarckk/personal-site). 
 
-That being said, there's still issues with the website I've yet to fix, like that one weird Flash of Invisible Text (FOIT) issue that I encounter occasionally only in production. Maybe I'll get around to fixing them one day. Maybe I won't. We'll see.
+That being said, there's still issues with the website I've yet to fix, like that one weird [Flash of Invisible Text (FOIT)](https://web.dev/codelab-avoid-invisible-text/) issue that I encounter occasionally only in production. Maybe I'll get around to fixing them one day. Maybe I won't. We'll see.
 
 [^1]: With bold **and** italics, I hope no one took me too seriously there. In fact, I think having too much fancy design/animations in portfolio sites/blogs is not only a huge waste of time but also ineffective if it can detract from the main content of the website. A blog derives its value from the writing. Keep it [simple](http://bettermotherfuckingwebsite.com/).
-[^2]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
+[^2]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledged React application so that client-side JS can then manipulate the DOM further.
 [^3]: Except instead of plain markdown, I'm using [MDX](https://mdxjs.com/), which allows me to insert JSX in markdown.
 [^4]: GraphQL, just like React, was developed by Facebook.
 [^5]: At this time, however, images in the post body cannot be handled by this plugin due to an error for which the PR fix hasn't been accepted yet. See my [commit log](https://github.com/sarckk/personal-site/commit/8b6cbf5647f4652dccb1eccd0bb5c08301ca5daa) for more info.
-[^6]: I also took care of converting local date strings (which NetlifyCMS generates) into an appropriately formatted UTC date string.
+[^6]: I also took care of converting local date strings (which NetlifyCMS generates) into an appropriately formatted UTC date string. I hate working with dates.
+[^7]: There is also a React hooks version of this called `useMemo`.
