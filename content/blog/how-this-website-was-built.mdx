@@ -6,19 +6,19 @@ date: 2020-05-06T00:00:00.000Z
 is_hidden: false
 featuredImage: /test.png
 ---
-In 2020, any reasonably motivated individual with a sense of agency could set themselves up a nice looking, performant website over the weekend, thanks to the [rise of the no-code movement](https://medium.com/@rrhoover/the-rise-of-no-code-e733d7c0944d) and with it, the proliferation of tools which allows people to make websites with virtually no code involved. Indeed, solutions like **Wix** and **Squarespace** abstracts away all the laborious HTML/CSS/JS work which power every website under the hood, and promises a hassle-free web development experience, allowing users to set up modern-looking websites in minutes. 
+In 2020, any reasonably motivated individual could, with a  little bit of initiative, set up for themselves a nice looking, performant website very quickly, thanks to the [rise of the no-code movement](https://medium.com/@rrhoover/the-rise-of-no-code-e733d7c0944d) and with it, the proliferation of tools which allow anyone to make websites without coding. Solutions like **Wix** and **Squarespace** abstract away all the laborious HTML/CSS/JS work which power each and every website under the hood, and promises a hassle-free web development experience, allowing users to set up modern-looking websites in mere minutes. 
 
 ### A give and take
 
-As wonderful as these tools are, they have a catch: by design, they offer limited ability for customization. Although some of the tools allow users to extend the basic templates they offer by manually entering CSS and JS snippets, they don't come close to the flexibility offered by custom-made solutions. This makes perfect sense, because the target customers for these tools are layment looking to quickly boostrap a personal site/blog, not programmers. There's a reason why web development is still in demand (and rapidly evolving still!) in 2020.
+As wonderful as these tools are, they have a catch: by design, they offer limited ability for customization. Although some of the tools allow users to extend the basic templates they offer by manually entering CSS and JS snippets, they don't come close to the flexibility offered by custom-made solutions. This makes perfect sense, because the target customers for these services is your Average Joe looking to quickly boostrap a website, not programmers. There's a reason why web development is still in high demand in 2020.
 
 ## The challenge
 
-***Obviously***, being a CS major, I couldn't possibly stoop to the lows of using **Wix**.[^1] Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since then. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, quite possibly underscoring the increased importance of delivering reliable, speedy experiences especially for critical web services, with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application[^2], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (having working knowledge in React also helped).
+***Obviously***, being a CS major, I couldn't possibly stoop to the lows of using **Wix**.[^1] Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, underscoring the increased importance of delivering reliable, speedy experiences (especially for critical web services), with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application[^2], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (admittedly, having a more than cursory knowledge in React also helped).
 
 ## A high-level overview
 
-First off, if anyone reading this wants to give Gatsby a shot, you should probably consult Gatsby's [tutorial](https://www.gatsbyjs.org/tutorial/) first, and go through the whole thing. It's very well structured so completing the tutorial should give you a cursory knowledge of the framework — enough to get you started (though a knowledge of JS should precede this step). This section is not meant as an introduction to Gatsby (or React for that matter), but rather it aims to give a general overview of how this site (a Gatsby app) was structured. You can check out the source code for the website [here](https://github.com/sarckk/personal-site).
+First off, if anyone reading this wants to give Gatsby a shot, you should probably consult Gatsby's [tutorial](https://www.gatsbyjs.org/tutorial/) first, and go through the whole thing. It's very well structured so completing the tutorial should give you a rough overview of the core ideas underpinning Gatsby — enough to get you started (though ideally a working knowledge of JS should precede this step). This section is not meant as an introduction to Gatsby (or React for that matter), but rather aims to give a general overview of how this site (a Gatsby app) is structured. You can check also out the source code for the website [here](https://github.com/sarckk/personal-site).
 
 ### Static Pages
 
@@ -33,16 +33,16 @@ The neat thing about Gatsby is that each **<name_of_file>.js** file placed in th
 └── work.js
 ```
 
-Above is the actual directory structure for the pages on my website. Note that `index.js` is the special file which is served when the user visits the root directory (in my case, [yonghoonshin.com](https://www.yonghoonshin.com)). 
+Above is the unix tree diagram for the directory containing the main pages of my website. Note that `index.js` is a special file which is served when the user visits the root directory (in my case, [yonghoonshin.com](https://www.yonghoonshin.com)). 
 
-Each of these javascript files exports a React component, each responsible for rendering that particular page. 
+Each of these javascript files exports a React component, and is responsible for rendering that particular page. 
 
 ### Dynamic Pages
 
-Manually placing **.js** files in `/src/pages` works fine for static pages for which we can predetermine the content, but what if we want to dynamically create pages? This would be helpful, if not downright necessary, for personal blogs like this, since no sane person would like to create a React component for each time a new blog post is to be added. Instead, what we probably want is a more streamlined workflow in which we simply add [markdown](https://daringfireball.net/projects/markdown/syntax#overview) files to a directory like `/content/blog` and have them automatically be converted to pages during build time. In fact, this is what my website is doing behind the scenes.[^3] 
+Manually placing **.js** files in `/src/pages` works fine for static pages for which we can predetermine the content, but what if we want to dynamically create pages? This would be helpful, if not downright necessary, for personal blogs like this, since no sane person would like to create a React component for each new blog post to be added. Instead, what we probably want is a more streamlined workflow in which we simply add [markdown](https://daringfireball.net/projects/markdown/syntax#overview) files to a directory like `/content/blog` and have them automatically be converted to pages during build time. In fact, this is what my website is doing behind the scenes.[^3] 
 
 #### Gatsby Source Plugins
-To achieve this, I had to download `gatsby-source-filesystem`, a source plugin whose job is essentially to look for files at the specified path and convert those to GraphQL nodes which can then be queried and passed into our React components.[^4] The specifics of what GraphQL entails is outside the scope of this post, but it is essential a **query language** much like traditional SQL which allows for fetching of data. The important thing to know is that Gatsby's data layer is built on top of GraphQL and its capabilities. 
+To achieve this, I had to download `gatsby-source-filesystem`, a source plugin whose job is essentially to look for files at the specified path and convert them to GraphQL nodes which can then be queried and passed into our React components.[^4] The specifics of what GraphQL entails is outside the scope of this post, but it is basically a **query language**, much like traditional SQL, which allows for fetching of data. The important thing to know is that Gatsby's data layer is built on top of GraphQL and its capabilities. 
 
 ```javascript
    {
@@ -67,10 +67,10 @@ To achieve this, I had to download `gatsby-source-filesystem`, a source plugin w
       },
     },
 ```
-In `gatsby-config.js`, I am sourcing nodes from three separate directories, one for the image assets used in blog posts (to be transformed by `gatsby-transformer-sharp`), two for markdown files in the **blogs** and **books** collections.
+In `gatsby-config.js`, I am sourcing nodes from three separate directories, one for the image assets used in blog posts (to be transformed by the `gatsby-transformer-sharp` plugin) and two for markdown files in the **blogs** and **books** collections respectively.
 
 ### Gatsby Transformer Plugins
-After sourcing the markdown files, they are available as generic ** file nodes** in the GraphQL layer. However, to be rendered as blog posts, I need a way to convert them to **markdown nodes**. Here is the relevant part in `gatsby-config.js`:
+After sourcing the markdown files, they are available as generic ** file nodes** in the GraphQL layer. However, to be rendered as blog posts, I need to convert them to **markdown nodes**. Here is the relevant part in `gatsby-config.js`:
 
 ```javascript
     {
@@ -103,8 +103,8 @@ After sourcing the markdown files, they are available as generic ** file nodes**
 A few things to note here:
 
 1. I'm using MDX instead of Markdown (they have the file extension .mdx)
-2. I'm including 3 plugins along with `gatsby-plugin-mdx`. `gatsby-remark-images` converts the image links in .mdx files to image nodes to be processed by `gatsby-transformer-sharp` and consumed by `gatsby-image` to create images which are lazy-loaded and "blurred" into view. `gatsby-remark-relative-images` is a small plugin which automatically converts image sources generated by [NetlifyCMS](https://www.netlifycms.org/) to be relative to the node's parent directory.[^5] This has to be placed before `gatsby-remark-images` for Gatsby to play nice with NetlifyCMS. Lastly, I'm using `gatsby-remark-prismjs` which inserts pretty styling for code blocks which you are seeing on this very page.
-3. A small annoyance, but I'm specifying the plugins under both **plugins** and **gatsbyRemarkPlugins** fields rather redundantly because it magically fails to work without it. This is a known issue with `gatsby-plugin-mdx`.
+2. I'm including 3 plugins along with `gatsby-plugin-mdx`. `gatsby-remark-images` converts the image links in .mdx files to image nodes to be processed by `gatsby-transformer-sharp` and consumed by `gatsby-image` to create images which are lazy-loaded and "blurred" into view. `gatsby-remark-relative-images` is a small plugin which automatically converts image sources generated by [NetlifyCMS](https://www.netlifycms.org/) to be relative to the node's parent directory.[^5] This has to be placed before `gatsby-remark-images` for Gatsby to play nicely with NetlifyCMS. Lastly, I'm using `gatsby-remark-prismjs` which inserts pretty styling for code blocks which you are seeing on this very page.
+3. A small annoyance, but I'm specifying the plugins under both **plugins** and **gatsbyRemarkPlugins** fields (rather redundantly) because it magically fails to work without it. This is a known issue with `gatsby-plugin-mdx`.
 
 ### Consuming nodes in Gatsby Node API
 Once we have sourced and transformed the appropriate Mdx nodes, they become available via a GraphQL query. Using this and [Gatsby's Node API](https://www.gatsbyjs.org/docs/node-apis/), we can dynamically create pages based our MDX files. 
@@ -212,18 +212,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 }
 ```
 
-All we need to do now is to run an asynchronous GraphQL query fetching allMdx (where is_hidden field is not true) and fetch each Mdx node's `pathname` and `templateKey`. The `templateKey` specifies which template the page should be created with, since I have two types of posts: **blogs** and **book reviews**. Each page has a different layout and styling, as specified in `blog-post.js` or `book-review.js` under the `src/templates` directory. The rest of the code is quite straightforward: I just need to iterate over each fetcehd Mdx node and create a page out of that with the appropriate context and component using the Gatsby's `createPage` helper method.
+All we need to do now is to run an asynchronous GraphQL query fetching allMdx (where is_hidden field is not true, to filter out the dummy post) and fetch each Mdx node's `pathname` and `templateKey`. The `templateKey` specifies which template the page should be created with, since I have two types of posts: **blogs** and **book reviews**. Each page has a different layout and styling, as specified in `blog-post.js` or `book-review.js` under the `/src/templates` directory. The rest of the code is quite straightforward: I just need to iterate over each fetched Mdx node and create a page out of that with the appropriate context and component using Gatsby's `createPage` helper method.
 
 
-You can check out the full source code [here](https://github.com/sarckk/personal-site/blob/master/gatsby-node.js).
+You can check out the full code [here](https://github.com/sarckk/personal-site/blob/master/gatsby-node.js).
 
 ### Think Again Sunshine
 At this point, I hope I've demonstrated how MDX files are dynamically transformed into actual pages. This satisifies one major aspect of the website's requirements, but really, only a small portion of the website is done.
 
 #### The pain of NetlifyCMS
-In hindsight, I never should have brought in NetlifyCMS. What Netlify's Content Management Service (it's about time I revealed what CMS stands for!) does is it provides a nice(r) interface for editing your markdown / mdx files complete with an admin dashboard, an editorial workflow (if enabled), rich text editor (albeit kinda shitty), and github as a single source of truth. So while this might have made sense in a real client work where the site administrator is unlikely to be a programmer (because why, then, would they have hired you to build their publishing platform?), it makes little sense for a solo project where I'm relatively comfortable dealing with the raw markdown syntax. Notwithstanding, I still think I learnt something of value by trying to grapple with integrating NetlifyCMS with Gatsby.
+In hindsight, I never should have brought in NetlifyCMS. What Netlify's Content Management Service (it's about time I revealed what CMS stands for!) does is it provides a nice(r) interface for editing your markdown / mdx files complete with an admin dashboard, an editorial workflow (if enabled), rich text editor (albeit kinda shitty), and an external repo as a single source of truth. So while this might have made sense in a real client project where the site administrator is unlikely to be a programmer (because why, then, would they have hired you to build their publishing platform?), it makes little sense for a solo project where I'm relatively comfortable dealing with the raw markdown syntax. Notwithstanding, I still think I learnt something of value by trying to integrating NetlifyCMS with Gatsby.
 
-Out of the box, the two work rather nicely, thought not void of some (known) pitfalls that you have to cautiously traverse around. The biggest headache, for me, was trying to customize the preview window of the CMS to more or less match how the post would look like on the website once published. 
+Out of the box, the two work rather nicely, though not without some pitfalls that you have to cautiously avoid. However, the biggest challenge for me was trying to customize the preview window of the CMS to more or less match how the post would look like on the website once published. 
 
 The way you do this is by calling something like:
 
@@ -236,9 +236,9 @@ CMS.registerPreviewTemplate("blog", props => (
   </StyleSheetInjector>
 ))
 ```
-The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on [this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window. 
+The problem is that since I'm using `styled-components` with their **ThemeProvider** component which passes down a global styles object as props to each styled component for easier theming, I needed a way to inject these styles to the iframe hosting the NetlifyCMS preview. Fortunately, thanks to the replies on [this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** to inject css styles to the specified DOM node, which in this case was the iframe window. 
 
-***But that was not it***. Once I solved *that* problem, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. The problem is, the format of the NetlifyCMS body widget value (`String`) is not  recognizable by `MDXRenderer`, which is used to render the Mdx node body queried from GraphQL (if you wanted to know, `MDXRenderer` appears to take in a javascript representation of the MDX content). Thus, for NetlifyCMS previews, I had to use a client-side mdx parsing library called `mdx-scoped-runtime`, a wrapper around the more popular but unfortunately not working (for my case) `mdx-runtime`:
+Once I pushed those changes, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. The problem is, the format of the NetlifyCMS body widget value (`String`) is not  recognizable by `MDXRenderer`, which is used to render the Mdx node body queried from GraphQL (if you wanted to know, `MDXRenderer` appears to take in a javascript representation of the MDX content). Thus, for NetlifyCMS previews, I had to use a client-side mdx parsing library called `mdx-scoped-runtime`, a relatively obscure wrapper around the more popular but unfortunately not working (for my case) `mdx-runtime`:
 
 ```javascript
 import MDX from "mdx-scoped-runtime"
@@ -256,9 +256,9 @@ Provide the wrapper, html-tags-to-custom-components mapping, and component short
 The last thing I want to write about is something specific to React. In React, we can use 
 
 ### And so it goes..
-That about concludes what I have to say about my website. Obviously, there are other features of the website which took me a long time to figure out, but I think I covered enough material already. If you're interested you can always go checkout the [source code](https://github.com/sarckk/personal-site). 
+That about concludes what I have to say about my website. Obviously, there are other features of the website which took me long-ish time to figure out, but I think I covered more than enough material already. If you're interested you can always go check out the [source code](https://github.com/sarckk/personal-site). 
 
-That being said, there's still issues with the website I've yet to fix, like that one weird Flash of Invisible Text (FOIT) issue that I encounter occasionally. Maybe I'll get around to fixing them one day. Maybe I won't. We'll see.
+That being said, there's still issues with the website I've yet to fix, like that one weird Flash of Invisible Text (FOIT) issue that I encounter occasionally only in production. Maybe I'll get around to fixing them one day. Maybe I won't. We'll see.
 
 [^1]: With bold **and** italics, I hope no one took me too seriously there. In fact, I think having too much fancy design/animations in portfolio sites/blogs is not only a huge waste of time but also ineffective if it can detract from the main content of the website. A blog derives its value from the writing. Keep it [simple](http://bettermotherfuckingwebsite.com/).
 [^2]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
