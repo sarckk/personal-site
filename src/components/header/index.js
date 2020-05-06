@@ -421,7 +421,10 @@ export default ({ location, mobileSearchHandler }) => {
     >
       <HeaderDiv>
         <InnerHeaderDiv isOnBlog={isOnBlog} scrolledDown={scrolledDown}>
-          <MobileSearchButton onClick={toggleMobileSearch}>
+          <MobileSearchButton
+            onClick={toggleMobileSearch}
+            aria-label="Toggle mobile search"
+          >
             <SearchIcon17px />
           </MobileSearchButton>
 
@@ -447,7 +450,10 @@ export default ({ location, mobileSearchHandler }) => {
               books
             </ListItem>
             <SearchHeaderLI active={mobileMenuActive}>
-              <SearchButton onClick={toggleSearch}>
+              <SearchButton
+                onClick={toggleSearch}
+                aria-label="Expand search bar"
+              >
                 <SearchIcon17px />
               </SearchButton>
             </SearchHeaderLI>
@@ -456,7 +462,7 @@ export default ({ location, mobileSearchHandler }) => {
           <SearchPanel visible={searchVisible}>
             <SearchIcon17pxGray />
             <Search visible={searchVisible} type="desktop" />
-            <SearchClose onClick={toggleSearch}>
+            <SearchClose onClick={toggleSearch} aria-label="Close search bar">
               <SearchCloseLeft />
               <SearchCloseRight />
             </SearchClose>

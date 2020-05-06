@@ -273,14 +273,12 @@ const SearchBox = connectSearchBox(
     }, [clearText, refine])
 
     return (
-      <form>
-        <SearchInput
-          ref={forwardRef}
-          placeholder="Start searching..."
-          value={currentRefinement}
-          onChange={e => refine(e.currentTarget.value)}
-        />
-      </form>
+      <SearchInput
+        ref={forwardRef}
+        placeholder="Start searching..."
+        value={currentRefinement}
+        onChange={e => refine(e.currentTarget.value)}
+      />
     )
   }
 )
