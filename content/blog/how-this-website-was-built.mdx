@@ -238,12 +238,21 @@ CMS.registerPreviewTemplate("blog", props => (
 ```
 The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on [this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window. 
 
-***But that was not it***. Once I solved *that* problem, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. The problem is, the format of 
+***But that was not it***. Once I solved *that* problem, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. The problem is, the value of the NetlifyCMS body widget (in which MDX is written) is not in a format recognizable by `MDXRenderer` (which appears to be a representation of the MDX content in javascript), which is what I use to render Mdx node body queried from GraphQL. Thus, for NetlifyCMS previews, I had to use a client-side mdx parsing library called `mdx-scoped-runtime`, a wrapper around the more popular but unfortunately not working (for my case) `mdx-runtime`:
 
+```javascript
+import MDX from "mdx-scoped-runtime"
 
-*And voila, it works!*
+<MDX
+  components={{ ...CMS_COMPONENTS, ...CMS_WRAPPER}}
+  scope={CMS_SHORTCODES}
+>
+    {body}
+</MDX>
+```
+Provide the wrapper, html-tags-to-custom-components mapping, and component shortcodes, and *voila*, the preview works!
 
-#### 
+#### d
 
 [^1]: With bold **and** italics, I hope no one took me too seriously there. In fact, I think having too much fancy design/animations in portfolio sites/blogs is not only a huge waste of time but also ineffective if it can detract from the main content of the website. A blog derives its value from the writing. Keep it [simple](http://bettermotherfuckingwebsite.com/).
 [^2]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
