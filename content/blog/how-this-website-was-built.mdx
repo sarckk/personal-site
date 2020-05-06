@@ -236,9 +236,14 @@ CMS.registerPreviewTemplate("blog", props => (
   </StyleSheetInjector>
 ))
 ```
-The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on this[this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window. *And voila, it works!*
+The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on [this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window.
 
-####
+***But that was not it***. Once I solved that problem, I was faced with another one yet: rendering the MDX. Since I'm essentially retrieving the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, 
+
+
+*And voila, it works!*
+
+#### 
 
 [^1]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
 [^2]: Except instead of plain markdown, I'm using [MDX](https://mdxjs.com/), which allows me to insert JSX in markdown.
