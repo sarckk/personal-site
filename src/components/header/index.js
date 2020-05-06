@@ -333,7 +333,7 @@ export default ({ location, mobileSearchHandler }) => {
   const [scrolledDown, setScrolledDown] = useState(false)
   const [hideHeader, setHideHeader] = useState(false)
   const [mobileMenuActive, setMobileMenuActive] = useState(false)
-  const isOnBlog = location ? true : false
+  const isOnBlog = location && location.pathname === "/blog" ? true : false
 
   const makeBodyScrollable = () => {
     if (window !== undefined) {

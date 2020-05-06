@@ -5,7 +5,7 @@ export const Headings = {
     font-size: ${({ theme }) => theme.fontSize["5xl"]};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     margin-top: ${({ theme }) => theme.spacing["7"]};
-    margin-bottom: ${({ theme }) => theme.spacing["3"]};
+    margin-bottom: ${({ theme }) => theme.spacing["4"]};
   `,
 
   SerifH1: styled.h1`
@@ -13,7 +13,7 @@ export const Headings = {
     font-size: ${({ theme }) => theme.fontSize["5xl"]};
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     margin-top: ${({ theme }) => theme.spacing["7"]};
-    margin-bottom: ${({ theme }) => theme.spacing["3"]};
+    margin-bottom: ${({ theme }) => theme.spacing["4"]};
     line-height: ${({ theme }) => theme.lineHeight.tight};
   `,
 

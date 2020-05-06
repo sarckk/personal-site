@@ -61,6 +61,7 @@ export const theme = {
     wide: "0.025em",
     wider: "0.05em",
     widest: "0.1em",
+    thefuck: "0.25em",
   },
   lineHeight: {
     none: "1",

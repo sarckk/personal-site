@@ -27,6 +27,13 @@ export const Content = styled.div`
 
   > * {
     grid-column: main;
+
+    ${({ theme }) => theme.tabletPortrait`
+      grid-column: ${props =>
+        props.location && props.location.pathname === "/about"
+          ? "para"
+          : "main"};
+    `};
   }
 `
 
@@ -60,7 +67,7 @@ export default ({ location, children }) => {
           location={location}
           mobileSearchHandler={setMobileSearchVisible}
         />
-        <Content>{children}</Content>
+        <Content location={location}>{children}</Content>
         <Footer />
       </Container>
       <MobileSearchDropdown active={mobileSearchVisible}>

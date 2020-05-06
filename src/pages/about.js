@@ -2,18 +2,19 @@ import React from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { Headings, P, StyledAnchor } from "../components/page-elements"
-import me from "../images/me.jpeg"
 import SEO from "../components/seo"
+import GithubIcon from "../images/github.inline.svg"
+import LinkedInIcon from "../images/linkedin.inline.svg"
+import FileIcon from "../images/file.inline.svg"
 
 const AboutContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
   grid-template-rows: auto;
+  align-items: center;
+  grid-template-columns: 1fr;
 
   ${({ theme }) => theme.tabletPortrait`
-    & {
-      grid-template-columns: 1fr 1fr;
-    }
+    grid-template-columns: 2fr 1fr;
   `};
 `
 
@@ -21,19 +22,13 @@ const AboutTextFirstPart = styled.div`
   padding-right: 0;
 
   ${({ theme }) => theme.tabletPortrait`
-    padding-right: 30px;
-    & {
-      order: 1;
-    }
+    padding-right: 20px;
   `};
 `
 
 const AboutTextSecondPart = styled.div`
   ${({ theme }) => theme.tabletPortrait`
-    & {
-      order: 3;
-      grid-column: 1 / span 2;
-    }
+    grid-column: 1 / span 2;
   `};
 `
 
@@ -41,28 +36,133 @@ const AboutPic = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.colors.gray[400]};
+
+  // Credit goes to Mattia Astorina's brilliant codepen for this effect
+
+  background-color: #ecf2ff;
+  height: 230px;
+  max-width: 270px;
+  min-width: 200px;
+  background: radial-gradient(
+    farthest-corner at 80px 80px,
+    #f7f8fc 30%,
+    #deecfb 70%,
+    #f6e5fd 100%
+  );
+  animation: morph 30s ease-in-out infinite both alternate,
+    translation 20s ease-in-out infinite both alternate;
+
+  @keyframes morph {
+    0%,
+    100% {
+      border-radius: 28% 72% 43% 57% / 24% 72% 28% 76%;
+    }
+    20% {
+      border-radius: 59% 41% 66% 34% / 69% 54% 46% 31%;
+    }
+    40% {
+      border-radius: 56% 44% 43% 57% / 32% 78% 22% 68%;
+    }
+    60% {
+      border-radius: 61% 39% 32% 68% / 69% 71% 29% 31%;
+    }
+    80% {
+      border-radius: 77% 23% 44% 56% / 81% 59% 41% 19%;
+    }
+    90% {
+      border-radius: 38% 62% 44% 56% / 26% 59% 41% 74%;
+    }
+  }
+
+  @keyframes translation {
+    0%,
+    100% {
+      transform: none;
+    }
+    25% {
+      transform: translateY(-1%) rotate(-10deg) scale(1.05);
+    }
+    50% {
+      transform: translateY(6%) rotate(5deg, 10deg) scale(0.9);
+    }
+  }
+
+  order: 5;
+  margin-top: ${({ theme }) => theme.spacing["10"]};
+  margin-left: auto;
+  margin-right: auto;
 
   ${({ theme }) => theme.tabletPortrait`
-    & {
-      order: 2;
-    }
+    order: initial;
+    margin-top: 0;
   `};
 `
 
-const MyPic = styled.img`
-  max-width: 100%;
-  clip-path: url(#blob);
+const InfoSeparator = styled.div`
+  height: 1px;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.gray[300]};
+  margin: 5px 0;
+
+  ${({ theme }) => theme.tabletPortrait`
+    grid-column: 1 / span 2;
+  `};
 `
 
-export default () => {
+const Info = styled.div`
+  ${({ theme }) => theme.tabletPortrait`
+    grid-column: 1 / span 2;
+  `};
+`
+
+const InfoUL = styled.ul`
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-top: ${({ theme }) => theme.spacing["2"]};
+`
+
+const InfoLI = styled.li`
+  margin-right: ${({ theme }) => theme.spacing["6"]};
+  font-family: ${({ theme }) => theme.font.sans};
+  font-size: ${({ theme }) => theme.fontSize.xxs};
+  letter-spacing: ${({ theme }) => theme.letterSpacing.thefuck};
+  display: inline-block;
+`
+
+const Icon = styled.div`
+  height: 13px;
+  width: 13px;
+  margin-right: 6px;
+
+  .icon {
+    fill: ${({ theme }) => theme.colors.gray[600]};
+  }
+`
+
+const AboutLink = styled.a.attrs({
+  target: "_blank",
+  rel: "noreferrer noopener",
+})`
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.gray[600]};
+
+  :hover {
+    color: ${({ theme }) => theme.colors.gray[400]};
+    .icon {
+      fill: ${({ theme }) => theme.colors.gray[400]};
+    }
+  }
+`
+
+export default ({ location }) => {
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="About" />
       <AboutContainer>
-        <AboutPic>
-          <MyPic src={me} alt="me" />
-        </AboutPic>
         <AboutTextFirstPart>
           <Headings.SerifH1>Hey, I'm Shin</Headings.SerifH1>
           <P>
@@ -80,6 +180,9 @@ export default () => {
             I was born in South Korea, and lived in Netherlands and Singapore
             for a while before moving to London for my undergraduate education.
           </P>
+        </AboutTextFirstPart>
+        <AboutPic></AboutPic>
+        <AboutTextSecondPart>
           <P>
             I'm passionate about the intersection between technology and
             human-centric design. To me, programming represents a tool for
@@ -88,8 +191,6 @@ export default () => {
             programming language is thus akin to gaining creative freedom —
             freedom to make any ideas come alive. How empowering!
           </P>
-        </AboutTextFirstPart>
-        <AboutTextSecondPart>
           <P>
             At this point, you might be thinking:{" "}
             <strong>what the hell is the point of this website?</strong>
@@ -100,17 +201,30 @@ export default () => {
             refine, organize and connect some of them.
           </P>
         </AboutTextSecondPart>
+        <InfoSeparator />
+        <Info>
+          <InfoUL>
+            <InfoLI>
+              <AboutLink href="resume.pdf">
+                <Icon as={FileIcon} />
+                RESUME
+              </AboutLink>
+            </InfoLI>
+            <InfoLI>
+              <AboutLink href="https://github.com/sarckk">
+                <Icon as={GithubIcon} />
+                GITHUB
+              </AboutLink>
+            </InfoLI>
+            <InfoLI>
+              <AboutLink href="https://www.linkedin.com/in/yong-hoon-shin-592bba194/">
+                <Icon as={LinkedInIcon} />
+                LINKEDIN
+              </AboutLink>
+            </InfoLI>
+          </InfoUL>
+        </Info>
       </AboutContainer>
-      <svg width="0" height="0">
-        <defs>
-          <clipPath id="blob" transform="translate(170,250) scale(0.95)">
-            <path
-              d="M142.1,-180C177.8,-139.3,196.3,-88.6,210.1,-33.6C224,21.4,233.2,80.7,214,132.4C194.7,184.2,147,228.3,93.2,241.7C39.4,255,-20.3,237.4,-64.4,207.9C-108.5,178.4,-137,137,-154,95C-171,53,-176.6,10.4,-169.4,-29.8C-162.2,-69.9,-142.1,-107.7,-111.8,-149.4C-81.4,-191,-40.7,-236.5,6.2,-243.9C53.1,-251.3,106.3,-220.7,142.1,-180Z"
-              fill="#FFB4BC"
-            />
-          </clipPath>
-        </defs>
-      </svg>
     </Layout>
   )
 }
