@@ -14,7 +14,7 @@ As wonderful as these tools are, they have a catch: by design, they offer limite
 
 ## The challenge
 
-Obviously, being a computer science major, I couldn't possibly stoop to the lows of using **Wix**. Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since then. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, quite possibly underscoring the increased importance of delivering reliable, speedy experiences especially for critical web services, with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application\[^1], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (having working knowledge in React also helped).
+Obviously, being a computer science major, I couldn't possibly stoop to the lows of using **Wix**. Besides, I was fairly comfortable with the technical aspects of web development (having worked on making a website for a certain non-profit in Singapore back in 2016) and wanted to explore how this space had evolved since then. After some research, I learnt that static websites — serving static HTML files for faster loading speeds — were back in vogue, quite possibly underscoring the increased importance of delivering reliable, speedy experiences especially for critical web services, with corresponding significance placed on performance metrics such as [FMP (First meaningful paint)](https://developers.google.com/web/tools/lighthouse/audits/first-meaningful-paint) and [TTI (Time to Interactive)](https://developers.google.com/web/tools/lighthouse/audits/time-to-interactive). Around this time, I came across [GatsbyJS](https://www.gatsbyjs.org/), a framework built on React and GraphQL which generates static HTML files based on your React application[^1], enabling fast page loads while offering the attendant SEO benefits of statically rendered web pages. This seemed like a perfect fit for a relatively simple blog/portfolio website that I wanted to create, so I decided to go with GatsbyJS (having working knowledge in React also helped).
 
 ## A high-level overview
 
@@ -39,6 +39,70 @@ Each of these javascript files exports a React component, each responsible for r
 
 ### Dynamic Pages
 
-Manually placing **.js** files in `/src/pages` works fine for static pages for which we can predetermine the content, but what if we want to dynamically create pages? This would be helpful, if not downright necessary, for personal blogs like this, since no sane person would like to create a React component for each time a new blog post is to be added. Instead, what we could have is a streamlined workflow in which we simply add [markdown]()
+Manually placing **.js** files in `/src/pages` works fine for static pages for which we can predetermine the content, but what if we want to dynamically create pages? This would be helpful, if not downright necessary, for personal blogs like this, since no sane person would like to create a React component for each time a new blog post is to be added. Instead, what we probably want is a more streamlined workflow in which we simply add [markdown](https://daringfireball.net/projects/markdown/syntax#overview) files to a directory like `/content/blog` and have them automatically be converted to pages during build time. In fact, this is what my website is doing behind the scenes.[^2] 
+
+#### Gatsby Source Plugins
+To achieve this, I had to download `gatsby-source-filesystem`, a source plugin whose job is essentially to look for files at the specified path and convert those to GraphQL nodes which can then be queried and passed into our React components.[^3] The specifics of what GraphQL entails is outside the scope of this post, but it is essential a **query language** much like traditional SQL which allows for fetching of data. The important thing to know is that Gatsby's data layer is built on top of GraphQL and its capabilities. 
+
+```javascript
+   {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: "images",
+        path: `${__dirname}/content/assets`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `blog`,
+        path: `${__dirname}/content/blog`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `books`,
+        path: `${__dirname}/content/books`,
+      },
+    },
+```
+In `gatsby-config.js`, I am sourcing nodes from three separate directories, one for the image assets used in blog posts (to be transformed by `gatsby-transformer-sharp`), two for MDX files in the **blogs** and **books** collections.
+
+### Gatsby Transformer Plugins
+After sourcing the MDX files, they are available as file nodes in the GraphQL layer. However, to be rendered as blog posts, I need a way to convert them to **Mdx** nodes. Here is the relevant part in `gatsby-config.js`:
+
+```javascript
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        extensions: [`.mdx`, `.md`],
+        plugins: [
+          `gatsby-remark-relative-images`,
+          `gatsby-remark-images`,
+          `gatsby-remark-prismjs`,
+        ],
+        gatsbyRemarkPlugins: [
+          `gatsby-remark-relative-images`,
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1920,
+            },
+          },
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              aliases: { sh: "bash", js: "javascript" },
+            },
+          },
+        ],
+      },
+    },
+```
+A few things to note here:
+ - 
 
 [^1]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
+[^2]: Except instead of plain markdown, I'm using [MDX](https://mdxjs.com/), which allows me to insert JSX in markdown.
+[^3]: GraphQL, just like React, was developed by Facebook.
