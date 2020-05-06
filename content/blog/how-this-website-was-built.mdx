@@ -109,6 +109,7 @@ A few things to note here:
 ### Consuming nodes in Gatsby Node API
 Once we have sourced and transformed the appropriate Mdx nodes, they become available via a GraphQL query. Using this and [Gatsby's Node API](https://www.gatsbyjs.org/docs/node-apis/), we can dynamically create pages based our MDX files. 
 
+#### onCreateNode
 ```javascript
 exports.onCreateNode = async ({
   node,
@@ -168,6 +169,53 @@ Quite a mouthful to digest here, but the code is relatively simple. Using the `o
 2. Similarly, it adds *pathname* field to the Mdx node so that we can fetch it in components later and pass them to links.
 3. If the Mdx node belongs to the collection **books** (for my book reviews), it retrieves the ISBN field from the file's frontmatter, generates the link to the [Open Library Book Covers API](https://openlibrary.org/dev/docs/api/covers) and creates a remote file node using `createRemoteFileNode`. This is needed so that external images can be sourced as nodes for `gatsby-image` to do its magic. Just follow Gatsby's [advice](https://www.gatsbyjs.org/docs/preprocessing-external-images/).
 
+#### onCreatePages
+Once we are done adding custom fields to the nodes, we can generate the pages:
+
+```javascript
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const { createPage } = actions
+
+  const result = await graphql(`
+    query {
+      allMdx(filter: { frontmatter: { is_hidden: { ne: true } } }) {
+        edges {
+          node {
+            fields {
+              pathName
+            }
+            frontmatter {
+              templateKey
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    reporter.panicOnBuild(`Error while running GraphQL query.`)
+    return
+  }
+
+  result.data.allMdx.edges.forEach(({ node }) => {
+    createPage({
+      path: node.fields.pathName,
+      component: path.resolve(
+        `./src/templates/${String(node.frontmatter.templateKey)}.js`
+      ),
+      context: {
+        pathName: node.fields.pathName,
+      },
+    })
+  })
+}
+```
+
+All we need to do now is to run an asynchronous GraphQL query fetching allMdx (where is_hidden field is not true) and fetch each Mdx node's `pathname` and `templateKey`. The `templateKey` specifies which template the page should be created with, since I have two types of posts: **blogs** and **book reviews**. Each page has a different layout and styling, as specified in `blog-post.js` or `book-review.js` under the `src/templates` directory. The rest of the code is quite straightforward: I just need to iterate over each fetcehd Mdx node and create a page out of that with the appropriate context and component using the Gatsby's `createPage` helper method.
+
+
+You can check out the full source code [here](https://github.com/sarckk/personal-site/blob/master/gatsby-node.js).
 
 
 [^1]: It's actually cooler than that: Gatsby also performs a process called [hydration](https://www.gatsbyjs.org/docs/react-hydration/) which converts the static HTML files, once they've been served, to a full-fledge React application so that client-side JS can then manipulate the DOM further.
