@@ -238,7 +238,7 @@ CMS.registerPreviewTemplate("blog", props => (
 ```
 The problem is, since I'm using `styled-components` with their **ThemeProvider** component which passes down global styling rules as props to each styled component, I needed a way to inject these styles to the iframe powering the NetlifyCMS preview. Fortunately, thanks to the replies on [this github thread](https://github.com/netlify/netlify-cms/issues/793), I was able to find the solution which involved using `styled-component`'s ***StyleSheetManager*** which helps inject css styles to a specified DOM node, which in this case was the iframe window. 
 
-***But that was not it***. Once I solved *that* problem, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. 
+***But that was not it***. Once I solved *that* problem, I was faced with yet another challenge: actually rendering the MDX.[^6] In the previous code snippet, I'm essentially passing props which contain the values from the NetlifyCMS input/widget components and feeding them as props to `<BlogPreviewTemplate/>`, which then retrieves the actual contents of the widgets and passes *those* into another predefined `BlogTemplate` component. The problem is, the format of 
 
 
 *And voila, it works!*
@@ -250,4 +250,4 @@ The problem is, since I'm using `styled-components` with their **ThemeProvider**
 [^3]: Except instead of plain markdown, I'm using [MDX](https://mdxjs.com/), which allows me to insert JSX in markdown.
 [^4]: GraphQL, just like React, was developed by Facebook.
 [^5]: At this time, however, images in the post body cannot be handled by this plugin due to an error for which the PR fix hasn't been accepted yet. See my [commit log](https://github.com/sarckk/personal-site/commit/8b6cbf5647f4652dccb1eccd0bb5c08301ca5daa) for more info.
-[^6]: Another
+[^6]: I also took care of converting local date strings (which NetlifyCMS generates) into an appropriately formatted UTC date string.
