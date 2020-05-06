@@ -27,6 +27,7 @@ module.exports = {
           families: ["Charter"],
           urls: ["/fonts/fonts.css"],
         },
+        timeout: 2000,
       },
     },
     {

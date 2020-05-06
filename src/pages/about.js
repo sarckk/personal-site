@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { Headings, P, StyledAnchor } from "../components/page-elements"
@@ -159,6 +159,10 @@ const AboutLink = styled.a.attrs({
 `
 
 export default ({ location }) => {
+  useEffect(() => {
+    console.log("Rendered")
+  })
+
   return (
     <Layout location={location}>
       <SEO title="About" />
