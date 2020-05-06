@@ -2,9 +2,6 @@ backend:
   name: github
   repo: sarckk/personal-site
 
-
-local_backend: true
-
 media_folder: content/assets
 public_folder: /
 publish_mode: editorial_workflow
