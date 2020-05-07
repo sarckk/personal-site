@@ -24,6 +24,7 @@ const PostDetails = styled.div`
   ${({ theme }) => theme.tabletPortrait`
     flex-direction: row;
     margin-bottom: ${({ theme }) => theme.spacing["8"]};
+    align-items: center;
   `};
 `
 
