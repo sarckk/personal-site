@@ -130,7 +130,7 @@ const BookHit = styled(Hit)`
   padding: ${({ theme }) => theme.spacing["4"]} 0;
 
   ${({ theme }) => theme.tabletPortrait`
-    height: 50px;
+    height: 70px;
   `};
 `
 

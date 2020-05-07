@@ -7,7 +7,7 @@ import { Link } from "gatsby"
 import SEO from "../components/seo"
 
 const Heading = styled.div`
-  font-size: min(max(35px, 4vw), 50px);
+  font-size: min(max(40px, 4vw), 50px);
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   margin-top: ${({ theme }) => theme.spacing["7"]};
   margin-bottom: ${({ theme }) => theme.spacing["0"]};
@@ -22,7 +22,7 @@ const HomeLink = styled(Link)`
   margin-right: ${({ theme }) => theme.spacing["2"]};
   margin-left: ${({ theme }) => theme.spacing["2"]};
   transition all 0.3s ease;
-  font-size: min(max(20px, 4vw), 25px);
+  font-size: min(max(18px, 4vw), 25px);
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-family: ${({ theme }) => theme.font.alternateSerif};
   text-decoration: none;
