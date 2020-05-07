@@ -13,7 +13,7 @@ const BlogPost = styled.li`
   background-color: ${({ theme }) => theme.colors.white};
   cursor: pointer;
   transition: all 0.3s ease;
-  height: 350px;
+  height: 420px;
   box-shadow: ${({ theme }) => theme.boxShadow.postPreview};
   margin: 0 auto ${({ theme }) => theme.spacing["8"]} auto;
 
@@ -62,14 +62,14 @@ const PostTitle = styled.div`
 const PostDetails = styled.div`
   padding: ${({ theme }) => theme.spacing["6"]}
     ${({ theme }) => theme.spacing["8"]};
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex: 1;
 
   ${({ theme }) => theme.tabletPortrait`
-  padding: ${({ theme }) => theme.spacing["8"]}
-    ${({ theme }) => theme.spacing["10"]};
+    padding: ${({ theme }) => theme.spacing["8"]}
+      ${({ theme }) => theme.spacing["10"]};
   `};
 `
 
@@ -88,10 +88,12 @@ const PostDesc = styled.p`
 
 const PostThumbnail = styled(BackgroundImage)`
   order: -1;
-  flex: 0 0 40%;
+  flex: 0 0 60%;
+  background-size: contain;
 
   ${({ theme }) => theme.tabletPortrait`
     order: initial;
+    flex: 0 0 40%;
   `};
 `
 
