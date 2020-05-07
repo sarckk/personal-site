@@ -218,14 +218,14 @@ All we need to do now is to run an asynchronous GraphQL query fetching allMdx (w
 You can check out the full code [here](https://github.com/sarckk/personal-site/blob/master/gatsby-node.js).
 
 ### Think Again Sunshine
-At this point, I hope I've sucessfully demonstrated how MDX files are dynamically transformed into actual pages. At this point, though, only a small portion of the website is complete.
+At this point, I hope I've sucessfully demonstrated how MDX files are dynamically transformed into actual pages. However, we shouldn't be too happy because we've really only built a fraction of the website.
 
 #### The pain of NetlifyCMS
-In hindsight, I never should have brought in NetlifyCMS. What Netlify's Content Management Service (it's about time I revealed what CMS stands for!) does is it provides a nice(r) interface for editing your markdown / mdx files complete with an admin dashboard, an editorial workflow (if enabled), rich text editor (albeit kinda shitty), and an external repo as a single source of truth. So while this might have made sense in a real client project where the site administrator is unlikely to be a programmer (because why, then, would they have hired you to build their publishing platform?), it makes little sense for a solo project where I'm relatively comfortable dealing with the raw markdown syntax. Notwithstanding, I still think I learnt something of value by trying to integrate NetlifyCMS with Gatsby.
+In hindsight, I shouldn't have brought in NetlifyCMS. What Netlify's Content Management Service (it's about time I revealed what CMS stands for!) does is it provides a nice(r) interface for editing your markdown / mdx files complete with an admin dashboard, an editorial workflow (if enabled), rich text editor (albeit kinda shitty), and an external repo as a single source of truth. So while this might have made sense in a real client project where the site administrator is unlikely to be a programmer (because why, then, would they have hired you to build their publishing platform?), it makes little sense for a solo project where I'm relatively comfortable dealing with the raw markdown syntax. Notwithstanding, I still think I learnt something of value by trying to integrate NetlifyCMS with Gatsby.
 
-Out of the box, the two work rather nicely though not without some pitfalls that you have to cautiously avoid. However, the biggest challenge for me was trying to customize the preview window of the CMS to more or less match how the post would look like on the website once published. 
+Out of the box, the two work rather nicely though not without some pitfalls to avoid. However, the biggest challenge for me was trying to customize the preview window of the CMS to more or less match how the post would look like on the website once published. 
 
-The way you do this is by calling something like:
+The way you do this is by doing something like:
 
 ```javascript
 import CMS from "netlify-cms-app"
@@ -253,7 +253,7 @@ import MDX from "mdx-scoped-runtime"
 Provide the wrapper, html-tags-to-custom-components mapping, and component shortcodes, and *voila*, the preview works!
 
 #### Optimization using React Memo 
-The last thing I want to write about is something specific to React. In React, components re-render whenever there is a change in its props, its state, or when its parent re-renders. To prevent the last case from triggering unnecessary renders, we can use memoization in the form of the higher order component `React.memo`.[^7] This technique ended up preventing a lot of renders for my `Search` component which is imported by my header component, which in turn re-renders every time there is a change in the scroll direction. Without memoization, this would cause the `Search` component (which has a lot of parts to it in its own right) to re-render needlessly every time the user scrolls in a different direction. 
+The last thing I want to write about is something specific to React. In React, components re-render whenever there is a change in its props, its state, or when its parent re-renders. To prevent the parent component from causing unnecessary renders, we can use memoization in the form of the higher order component `React.memo`.[^7] This technique ended up preventing a lot of renders for my `Search` component which is imported by my header component (parent), which in turn re-renders every time there is a change in the scroll direction. Without memoization, this would cause the `Search` component (child component) to re-render needlessly every time the user scrolls in a different direction. 
 
 ```javascript
 export const Search = React.memo(({ visible, type }) => {
