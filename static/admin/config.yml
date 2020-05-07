@@ -39,6 +39,8 @@ collections:
       - { label: "Book Title", name: title }
       - { label: Authors, name: authors }
       - { label: Summary, name: summary }
-      - { label: ISBN, name: isbn }
+      - { label: ISBN, name: isbn}
+      - { label: Image, name: backupImage, widget: image}
+      - { label: "Use Backup", name: use_backup, widget: boolean, default: false }
       - { label: Hidden, name: is_hidden, widget: boolean, default: false }
       - { label: Body, name: body, widget: markdown }

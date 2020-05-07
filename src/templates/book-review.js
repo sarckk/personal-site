@@ -15,7 +15,12 @@ import SEO from "../components/seo"
 
 const BookDetails = styled.div`
   display: flex;
+  flex-direction: column;
   margin-bottom: ${({ theme }) => theme.spacing["4"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    flex-direction: row;
+  `};
 `
 
 const TextDetails = styled.div`
@@ -27,16 +32,16 @@ const TextDetails = styled.div`
 
 const Title = styled(Headings.H1)`
   font-family: ${({ theme }) => theme.font.serif};
-  line-height: normal;
-  margin: 0;
-  font-size: ${({ theme }) => theme.fontSize["3xl"]};
+  line-height: ${({ theme }) => theme.lineHeight.tight};
+  margin-bottom: ${({ theme }) => theme.spacing["2"]};
+  font-size: ${({ theme }) => theme.fontSize["2xl"]};
 
   ${({ theme }) => theme.mobileLandscape`
-    font-size: ${({ theme }) => theme.fontSize["4xl"]};
+    font-size: ${({ theme }) => theme.fontSize["3xl"]};
   `};
 
   ${({ theme }) => theme.tabletPortrait`
-    font-size: ${({ theme }) => theme.fontSize["5xl"]};
+    font-size: ${({ theme }) => theme.fontSize["4xl"]};
   `};
 `
 
@@ -55,10 +60,15 @@ const Authors = styled.div`
 `
 
 const BookCover = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.gray[300]};
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing["6"]};
+
+  ${({ theme }) => theme.tabletPortrait`
+    margin-bottom: 0;
+  `};
 `
 
 const Summary = styled.div`
@@ -181,6 +191,9 @@ export const BookReviewTemplate = ({
 
 export default ({ data }) => {
   const post = data.mdx
+  const coverImg = post.frontmatter.use_backup
+    ? post.frontmatter.backupImage.childImageSharp.fixed
+    : post.coverImg.childImageSharp.fixed
 
   return (
     <Layout>
@@ -193,7 +206,7 @@ export default ({ data }) => {
         title={post.frontmatter.title}
         authors={post.frontmatter.authors}
         body={post.body}
-        coverImg={post.coverImg.childImageSharp.fixed}
+        coverImg={coverImg}
         summary={post.frontmatter.summary}
         isPreview={false}
       />
@@ -207,7 +220,7 @@ export const query = graphql`
       body
       coverImg {
         childImageSharp {
-          fixed(width: 150) {
+          fixed(width: 200) {
             ...GatsbyImageSharpFixed
           }
         }
@@ -216,6 +229,14 @@ export const query = graphql`
         title
         authors
         summary
+        use_backup
+        backupImage {
+          childImageSharp {
+            fixed(width: 200) {
+              ...GatsbyImageSharpFixed
+            }
+          }
+        }
       }
     }
   }

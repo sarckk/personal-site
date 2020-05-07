@@ -30,10 +30,13 @@ const BookDiv = styled.div`
   justify-content: center;
 `
 
-const BookTitle = styled(Headings.H4)`
+const BookTitle = styled(Headings.H5)`
   font-family: ${({ theme }) => theme.font.serif};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
-  margin-bottom: 0;
+  margin-top: ${({ theme }) => theme.spacing["3"]};
+  margin-bottom: ${({ theme }) => theme.spacing["4"]};
+  text-align: center;
+  line-height: ${({ theme }) => theme.lineHeight.snug};
 `
 
 const BookAuthor = styled.div`
@@ -75,10 +78,9 @@ export default ({ data }) => {
       <SEO title="Books" />
       <PageDesc>
         <Headings.SerifH1>Books</Headings.SerifH1>
-        <P style={{ maxWidth: "600px" }}>
+        <P style={{ maxWidth: "500px", textAlign: "center" }}>
           Here are some of the books that I've read recently and my thoughts on
-          them. I also keep a list of books I look forward to reading, which you
-          can find{" "}
+          them. You can also find my book list{" "}
           <StyledAnchor
             href={`booklist.pdf`}
             rel="noopener noreferrer"
@@ -90,19 +92,24 @@ export default ({ data }) => {
         </P>
       </PageDesc>
       {edges.length === 0 ? (
-        <P>There are no books here</P>
+        <P style={{ margin: "0 auto" }}>There are no books here</P>
       ) : (
         <BookGrid>
           {edges.map(({ node }, index) => {
-            const title = node.frontmatter.title
-            const authors = node.frontmatter.authors
+            const fm = node.frontmatter
+            const title = fm.title
+            const authors = fm.authors
+            const useBackup = fm.use_backup
+            const coverImg = useBackup
+              ? fm.backupImage.childImageSharp.fixed
+              : node.coverImg.childImageSharp.fixed
 
             return (
               <Book
                 key={index}
                 title={title}
                 authors={authors}
-                coverImg={node.coverImg.childImageSharp.fixed}
+                coverImg={coverImg}
                 path={node.fields.pathName}
               />
             )
@@ -133,6 +140,14 @@ export const query = graphql`
           frontmatter {
             title
             authors
+            use_backup
+            backupImage {
+              childImageSharp {
+                fixed(width: 160) {
+                  ...GatsbyImageSharpFixed
+                }
+              }
+            }
           }
           fields {
             pathName

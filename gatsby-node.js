@@ -12,11 +12,12 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
       coverImg: File @link(from: "coverImg___NODE")
     }
 
-    type Frontmatter{
+    type Frontmatter @infer{
       isbn: String
+      backupImage: File @fileByRelativePath
+      use_backup: Boolean
     }
   `)
-  console.log("Successful!")
 }
 
 exports.onCreateNode = async ({
@@ -50,7 +51,7 @@ exports.onCreateNode = async ({
       value: pathName,
     })
 
-    if (parentNode.sourceInstanceName === "books") {
+    if (collection === "books") {
       const isbn = node.frontmatter.isbn
       const url = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`
 
@@ -96,7 +97,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   }
 
   result.data.allMdx.edges.forEach(({ node }) => {
-    console.log("node Frontmatter: ", node.frontmatter)
     createPage({
       path: node.fields.pathName,
       component: path.resolve(
