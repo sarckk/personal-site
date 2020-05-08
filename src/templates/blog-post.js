@@ -109,7 +109,7 @@ export const BlogTemplate = ({
                 <div>
                   <span role="img" aria-label="book">
                     &#x1f4d6;
-                  </span>
+                  </span>{" "}
                   {timeToRead} MIN READ
                 </div>
               )}

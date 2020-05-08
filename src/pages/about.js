@@ -181,7 +181,7 @@ export default ({ location }) => {
             , UK.
           </P>
           <P>
-            I was born in South Korea, and lived in Netherlands and Singapore
+            I was born in South Korea, and lived in the Netherlands and Singapore
             for a while before moving to London for my undergraduate education.
           </P>
         </AboutTextFirstPart>

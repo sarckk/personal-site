@@ -60,7 +60,7 @@ const PostTitle = styled.div`
 `
 
 const PostDetails = styled.div`
-  padding: ${({ theme }) => theme.spacing["6"]}
+  padding: ${({ theme }) => theme.spacing["4"]}
     ${({ theme }) => theme.spacing["8"]};
   display: flex;
   flex-direction: column;
@@ -120,6 +120,7 @@ const BlogWrapper = styled.div`
 
 const BlogUL = styled.ul`
   max-width: 400px;
+  padding: 0 15px;
   display: block;
   flex-wrap: wrap;
   list-style: none;
@@ -130,6 +131,7 @@ const BlogUL = styled.ul`
     display: flex;
     width: 100%;
     max-width: none;
+    padding: 0;
   `};
 `
 
@@ -204,7 +206,10 @@ const BlogPreviewPage = ({ location, data }) => {
                           <span role="img" aria-label="book">
                             &#x1f4d6;
                           </span>
-                          {node.timeToRead} MIN READ
+                          {` `}
+                          {node.timeToRead}
+                          {` `}
+                          MIN READ
                         </span>
                       </ExtraDetails>
                       <PostDesc>{truncatedDesc}</PostDesc>
