@@ -19,11 +19,6 @@ const HeaderContainer = styled.div`
     transition: transform 0.1s ease-out;
     transform: ${props => (props.hide ? "translateY(-100%)" : "translateY(0)")};
     backdrop-filter: blur(15px);
-    background-color: ${props =>
-      props.isOnBlog &&
-      css`
-        ${({ theme }) => theme.colors.transparent}
-      `};
     ${props =>
       props.scrolledDown &&
       css`
@@ -56,20 +51,6 @@ const InnerHeaderDiv = styled.div`
   ${({ theme }) => theme.tabletPortrait`
     justify-content: center;
     padding-bottom: 8px;
-    border-bottom: 1px solid
-      ${props => {
-        if (!props.scrolledDown) {
-          return props.isOnBlog
-            ? css`
-                ${({ theme }) => theme.colors.gray[500]}
-              `
-            : css`
-                ${({ theme }) => theme.colors.gray[300]}
-              `
-        } else {
-          return css`transparent`
-        }
-      }};
   `};
 `
 

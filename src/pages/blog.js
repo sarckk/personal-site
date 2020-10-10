@@ -6,7 +6,6 @@ import { graphql, Link } from "gatsby"
 import { Loader } from "../components/shared/loader"
 import { truncate } from "../util/truncate"
 import BackgroundImage from "gatsby-background-image"
-import Wave from "../images/wave.inline.svg"
 import SEO from "../components/seo"
 
 const BlogPost = styled.li`
@@ -97,13 +96,6 @@ const PostThumbnail = styled(BackgroundImage)`
   `};
 `
 
-const TopWave = styled.div`
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: -2;
-`
-
 const BlogWrapper = styled.div`
   grid-column: full;
   width: 100%;
@@ -168,7 +160,6 @@ const BlogPreviewPage = ({ location, data }) => {
   }, [])
 
   const loadMorePosts = () => {
-    console.log("Loading more posts...")
     setPostsToShow(postsToShow => postsToShow + 5)
     setAllPostsShown(postsToShow + 5 >= edges.length)
   }
@@ -223,11 +214,6 @@ const BlogPreviewPage = ({ location, data }) => {
           {!allPostsShown && <Loader onVisible={loadMorePosts} />}
         </BlogUL>
       </BlogWrapper>
-      {isTabletPortrait && (
-        <TopWave>
-          <Wave />
-        </TopWave>
-      )}
     </Layout>
   )
 }

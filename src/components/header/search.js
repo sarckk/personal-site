@@ -50,7 +50,6 @@ const SearchArea = styled.div`
 `
 
 const SearchInput = styled.input`
-  border: 0;
   width: 100%;
   padding: 10px 15px;
   border: 1px solid ${({ theme }) => theme.colors.gray[700]};
@@ -84,6 +83,8 @@ const HitBox = styled.div`
     top: 39px;
     background-color: ${({ theme }) => theme.colors.white};
     border-style: solid;
+    // hack to hide border on searchbar
+    margin-top: -1px;
     border-width: 0 1px 1px 1px;
     box-sizing: border-box;
     border-color: ${({ theme }) => theme.colors.gray[300]};
