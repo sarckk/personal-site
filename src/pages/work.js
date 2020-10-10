@@ -44,12 +44,6 @@ const RepoDesc = styled.div`
   `};
 `
 
-const ComingSoon = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.gray[600]};
-  font-family: ${({ theme }) => theme.font.sans};
-`
-
 const Lang = styled.div`
   font-family: ${({ theme }) => theme.font.sans};
   font-size: ${({ theme }) => theme.fontSize.xxs};

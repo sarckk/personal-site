@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import Layout from "../components/layouts/layout"
 import { ExtraDetails } from "../components/page-elements"
@@ -136,28 +136,6 @@ const BlogPreviewPage = ({ location, data }) => {
   const [allPostsShown, setAllPostsShown] = useState(
     postsToShow >= edges.length
   )
-  const [isTabletPortrait, setIsTabletPortrait] = useState(false)
-
-  useEffect(() => {
-    if (window === undefined) {
-      return
-    }
-
-    const mql = window.matchMedia("(min-width: 768px)")
-
-    const mediaListener = media => {
-      if (media.matches) {
-        setIsTabletPortrait(true)
-      } else {
-        setIsTabletPortrait(false)
-      }
-    }
-
-    mediaListener(mql)
-    mql.addListener(mediaListener)
-
-    return () => mql.removeListener(mediaListener)
-  }, [])
 
   const loadMorePosts = () => {
     setPostsToShow(postsToShow => postsToShow + 5)

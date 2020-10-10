@@ -109,7 +109,7 @@ export default () => {
       )
     }
 
-    const throttledMoveEyes = throttle(moveEyes, 20)
+    const throttledMoveEyes = throttle(moveEyes, 5)
 
     window.addEventListener("mousemove", throttledMoveEyes)
 
